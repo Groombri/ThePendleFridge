@@ -1,27 +1,8 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
 import SafeViewAndroid from '../styles/SafeViewAndroid';
-
-// CUSTOM BUTTON
-const AppButton = ({ onPress, title }) => (
-    <TouchableOpacity 
-        onPress={onPress} 
-        style={styles.header_button}
-        activeOpacity={0.8}
-    >
-      <Text style={styles.header_button_text}>{title}</Text>
-    </TouchableOpacity>
-  );
-
-// CUSTOM BUTTON OF HAMBURGER MENU
-  const MenuButton = ({ onPress }) => (
-    <TouchableOpacity 
-        onPress={onPress} 
-        activeOpacity={0.8}
-    >
-    <Image style={styles.burger_icon} source={require('../assets/images/burger_menu.png')}/>
-    </TouchableOpacity>
-);
+import YellowButton from '../components/YellowButton';
+import MenuButton from '../components/MenuButton';
 
 function HomeScreen(props) {
     return (
@@ -36,11 +17,13 @@ function HomeScreen(props) {
                         <Image style={styles.pendle_icon} source={require('../assets/images/pendle.png')}/>
                     </View>
                     <View style={styles.header_btn_container}>
-                        <AppButton title="Donate an item"/>
+                        <YellowButton title="Donate an item"/>
                     </View>
                 </View>
                 <View style={styles.body}>
-                    <Text>HELLO</Text>
+                    <ScrollView >
+                        <Text>Hello</Text>
+                    </ScrollView>
                 </View>
             </View>
         </SafeAreaView>
@@ -69,27 +52,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
 
-    header_button: {
-        backgroundColor: "#FFB900",
-        width: "80%",
-        height: 50,
-        borderRadius: 5,
-        justifyContent: "center",
-    },
-
-    header_button_text: {
-        fontFamily: "Poppins",
-        fontWeight: "bold",
-        fontSize: 20,
-        color: "black",
-        textAlign: "center",
-    },
-
-    burger_icon: {
-        width: 30,
-        height: 30,
-    },
-
     pendle_icon: {
         width: 50,
         height: 50,
@@ -105,6 +67,13 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 29,
         color: "white"
+    },
+
+    body_text: {
+        fontFamily: "Poppins",
+        fontWeight: "bold",
+        fontSize: 50,
+        color: "black"
     }
 });
 
