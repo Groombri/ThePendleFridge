@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableOpacity, SafeAreaView } from 'react-native';
+import SafeViewAndroid from '../styles/SafeViewAndroid';
 
 // CUSTOM BUTTON
 const AppButton = ({ onPress, title }) => (
@@ -24,23 +25,25 @@ const AppButton = ({ onPress, title }) => (
 
 function HomeScreen(props) {
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <View style={styles.header_main}>
-                    <MenuButton/>
-                    <Text style={styles.title_text}>
-                    The Pendle Fridge
-                    </Text>
-                    <Image style={styles.pendle_icon} source={require('../assets/images/pendle.png')}/>
+        <SafeAreaView style={SafeViewAndroid.AndroidSafeArea}>
+            <View style={styles.container}>
+                <View style={styles.header}>
+                    <View style={styles.header_main}>
+                        <MenuButton/>
+                        <Text style={styles.title_text}>
+                        The Pendle Fridge
+                        </Text>
+                        <Image style={styles.pendle_icon} source={require('../assets/images/pendle.png')}/>
+                    </View>
+                    <View style={styles.header_btn_container}>
+                        <AppButton title="Donate an item"/>
+                    </View>
                 </View>
-                <View style={styles.header_btn_container}>
-                    <AppButton title="Donate an item"/>
+                <View style={styles.body}>
+                    <Text>HELLO</Text>
                 </View>
             </View>
-            <View style={styles.body}>
-                <Text>HELLO</Text>
-            </View>
-        </View>
+        </SafeAreaView>
     );
 }
 
