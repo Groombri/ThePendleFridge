@@ -1,4 +1,3 @@
-import './app/utils/gesture-handler';
 import { StyleSheet, Text, View } from 'react-native';
 import HomeScreen from './app/screens/HomeScreen';
 
