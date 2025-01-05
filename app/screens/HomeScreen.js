@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
 import SafeViewAndroid from '../styles/SafeViewAndroid';
 import YellowButton from '../components/YellowButton';
 import MenuButton from '../components/MenuButton';
+import DonateModal from '../components/DonateModal';
 
 function HomeScreen(props) {
+    const [isModalVisible, setModalVisible] = useState(false);
+
     return (
         <SafeAreaView style={SafeViewAndroid.AndroidSafeArea}>
             <View style={styles.container}>
@@ -17,7 +20,11 @@ function HomeScreen(props) {
                         <Image style={styles.pendle_icon} source={require('../assets/images/pendle.png')}/>
                     </View>
                     <View style={styles.header_btn_container}>
-                        <YellowButton title="Donate an item"/>
+                        <YellowButton 
+                            title="Donate an item"
+                            onPress={() => {setModalVisible(true)}}
+                        />
+                        <DonateModal visible={isModalVisible} onClose={() => {setModalVisible(false)}} />
                     </View>
                 </View>
                 <View style={styles.body}>

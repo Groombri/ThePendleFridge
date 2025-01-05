@@ -2,7 +2,7 @@ import { StyleSheet, Platform, StatusBar } from "react-native";
 
 /**
  * As <SafeAreaView> does not work for Android devices, to ensure that screen contents are not hidden
- * e.g. by camera, this calculates the SafeAreaView for an android device, based on the size of its S-Bar
+ * e.g. by camera, this calculates the SafeAreaView for an android device, based on the size of its StatusBar
  */
 export default StyleSheet.create({
   AndroidSafeArea: {
