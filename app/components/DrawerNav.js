@@ -1,7 +1,7 @@
 import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { Entypo, Ionicons, AntDesign } from "@expo/vector-icons";
+import { Entypo, AntDesign } from "@expo/vector-icons";
 
 //import all screens
 import HomeScreen from "../screens/HomeScreen";
@@ -16,9 +16,9 @@ const DrawerNav = () => {
     <NavigationContainer>
       <Drawer.Navigator screenOptions={screenOptions}>
         <Drawer.Screen name="Home" component={HomeScreen} />
-        <Drawer.Screen name="Help" component={HelpScreen} />
-        <Drawer.Screen name="About" component={AboutScreen} />
         <Drawer.Screen name="Notifications" component={NotificationsScreen} />
+        <Drawer.Screen name="How to use" component={HelpScreen} />
+        <Drawer.Screen name="About" component={AboutScreen} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
@@ -26,38 +26,39 @@ const DrawerNav = () => {
 
 const screenOptions = ({ route }) => ({
     headerShown: false,
-    drawerActiveTintColor: "#333",
-    drawerActiveBackgroundColor: "lightgreen",
+    drawerActiveTintColor: "white",
+    drawerInactiveTintColor: "#333",
+    drawerActiveBackgroundColor: "green",
+    drawerItemStyle: {
+      borderRadius: 5,
+    },
     drawerContentStyle: {
         backgroundColor: "white",
     },
     drawerLabelStyle: {
+        alignItems: "center",
         fontFamily: "Poppins",
-        fontSize: 29,
-        fontWeight: "bold",
-        color: "black",
-        marginLeft: 15,
-        paddingTop: 32,
-        paddingBottom: 20,
+        fontSize: 20,
+        marginLeft: 5,
+        paddingTop: 10,
+        paddingBottom: 10,
     },
-    drawerIcon: ({ color, size }) => {
+    drawerIcon: ({ color }) => {
       if (route.name === 'Home') {
-        return <Entypo name="home" color={iconCol} size={iconSize} />;
+        return <Entypo name="home" size={iconSize} color={color} />;
       }
-      if (route.name === 'Help') {
-        return <AntDesign name="questioncircle" size={iconSize} color={iconCol} />;
+      if (route.name === 'How to use') {
+        return <AntDesign name="questioncircle" size={iconSize} color={color} />;
       }
       if (route.name === 'About') {
-        //return <Ionicons name="information-circle-sharp" size={iconSize} color={iconCol} />; //for some reason this icon was smaller
-        return <AntDesign name="questioncircle" size={iconSize} color={iconCol} />;
+        return <AntDesign name="infocirlce" size={iconSize} color={color} />
       }
       if (route.name === 'Notifications') {
-        return <Entypo name="bell" size={iconSize} color={iconCol} />;
+        return <Entypo name="bell" size={iconSize} color={color} />;
       }
     },
 });
 
-const iconSize = 32;
-const iconCol = "darkgreen"; 
+const iconSize = 30; 
 
 export default DrawerNav;

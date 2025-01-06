@@ -13,7 +13,7 @@ function HomeScreen(props) {
             <View style={styles.container}>
                 <View style={styles.header}>
                     <View style={styles.header_main}>
-                        <MenuButton/>
+                        <MenuButton />
                         <Text style={styles.title_text}>
                         The Pendle Fridge
                         </Text>
@@ -60,8 +60,9 @@ const styles = StyleSheet.create({
     },
 
     pendle_icon: {
-        width: 50,
-        height: 50,
+        width: 37,
+        height: 37,
+        marginRight: -4
     },
 
     body: {
@@ -73,7 +74,8 @@ const styles = StyleSheet.create({
         fontFamily: "Poppins",
         fontWeight: "bold",
         fontSize: 29,
-        color: "white"
+        color: "white",
+        marginLeft: 3
     },
 
     body_text: {

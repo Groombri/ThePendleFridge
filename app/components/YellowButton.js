@@ -19,7 +19,7 @@ const YellowButton = ({ onPress, title }) => {
 const styles = StyleSheet.create({
     yellow_button: {
         backgroundColor: "#FFB900",
-        width: "80%",
+        width: "65%",
         height: 50,
         borderRadius: 5,
         justifyContent: "center",

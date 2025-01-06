@@ -18,7 +18,7 @@ const MenuButton = () => {
 const styles = StyleSheet.create({
     burger_icon: {
         width: 30,
-        height: 30
+        height: 30,
     }
 })
 
