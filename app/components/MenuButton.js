@@ -1,6 +1,6 @@
-import React from 'react'
-import { TouchableOpacity, Image, StyleSheet } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
+import React from 'react';
+import { TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 // Hamburger menu button for page navigation
 const MenuButton = () => {
@@ -12,7 +12,7 @@ const MenuButton = () => {
         >
         <Image style={styles.burger_icon} source={require('../assets/images/burger_menu.png')}/>  
         </TouchableOpacity>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
@@ -20,6 +20,6 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
     }
-})
+});
 
-export default MenuButton
+export default MenuButton;

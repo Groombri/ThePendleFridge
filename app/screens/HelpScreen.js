@@ -1,20 +1,21 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, SafeAreaView, View } from 'react-native';
+import SafeViewAndroid from '../styles/SafeViewAndroid';
+import CustomHeader from '../components/CustomHeader';
+import DefaultPageStyle from '../styles/DefaultPageStyle';
+import TextStyles from '../styles/TextStyles';
 
 export default function HelpScreen() {
   return (
-    <View style={styles.container}>
-      <Text>Welcome Help</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={SafeViewAndroid.AndroidSafeArea}>
+      <View style={DefaultPageStyle.container}>
+        <CustomHeader title="User Guide" />
+        <View style={DefaultPageStyle.body}>
+          <Text style={TextStyles.bodyTitle}>Hello</Text>
+          <Text style={TextStyles.bodyMain}>This is the guide page.</Text>
+        </View>
+      </View>
+    </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'black',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
