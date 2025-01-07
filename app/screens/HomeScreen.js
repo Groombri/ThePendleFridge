@@ -1,21 +1,18 @@
 import React from 'react';
-import { StyleSheet, View, Text, SafeAreaView, ScrollView } from 'react-native';
-import SafeViewAndroid from '../styles/SafeViewAndroid';
+import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import CustomHeader from '../components/CustomHeader';
 import TextStyles from '../styles/TextStyles';
 
 function HomeScreen() {
     return (
-        <SafeAreaView style={SafeViewAndroid.AndroidSafeArea}>
-            <View style={styles.container}>
-                <CustomHeader title="The Pendle Fridge" route="Home" />
-                <View style={styles.body}>
-                    <ScrollView >
-                        <Text style={TextStyles.bodyTitle}>Hello</Text>
-                    </ScrollView>
-                </View>
+        <View style={styles.container}>
+            <CustomHeader title="The Pendle Fridge" route="Home" />
+            <View style={styles.body}>
+                <ScrollView >
+                    <Text style={TextStyles.bodyTitle}>What's in?</Text>
+                </ScrollView>
             </View>
-        </SafeAreaView>
+        </View>
     );
 }
 

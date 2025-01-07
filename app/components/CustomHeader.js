@@ -4,6 +4,11 @@ import YellowButton from '../components/YellowButton';
 import MenuButton from '../components/MenuButton';
 import DonateModal from '../components/DonateModal';
 
+/**
+ * Custom green header that is displayed at the top of each page.
+ * This contains the page title, Pendle logo, and DrawerNav icon.
+ * In the case of the home page, the header also contains the button to donate an item to the fridge.
+ */
 function CustomHeader({ title, route }) {
     const [isModalVisible, setModalVisible] = useState(false);
 
