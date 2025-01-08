@@ -50,7 +50,7 @@ const BarcodeScanner = () => {
 
     setScanned(true);
     handleScannedData({type, data});
-    navigation.navigate("HomeScreen");
+    navigation.navigate("Home");
   };
 
   //Processes the scanned data
