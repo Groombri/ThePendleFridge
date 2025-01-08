@@ -1,10 +1,11 @@
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, TouchableOpacity } from 'react-native';
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import HomeScreen from './app/screens/HomeScreen';
 import BarcodeScannerScreen from './app/screens/BarcodeScannerScreen';
 import DrawerNav from "./app/components/DrawerNav";
 import SafeViewAndroid from "./app/styles/SafeViewAndroid";
+import NotificationsScreen from './app/screens/NotificationsScreen';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,8 @@ export default function App() {
           <Stack.Screen name="DrawerNav" component={DrawerNav} />
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
           <Stack.Screen name="BarcodeScannerScreen" component={BarcodeScannerScreen} />
+          <Stack.Screen name="NotificationsScreen" component={NotificationsScreen} />
+
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>

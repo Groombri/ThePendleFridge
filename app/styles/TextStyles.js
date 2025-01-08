@@ -15,4 +15,10 @@ export default StyleSheet.create({
         fontFamily: "Poppins",
         fontSize: 20,
     },
+    link: {
+        fontFamily: "Poppins",
+        fontSize: 20,
+        color: "green",
+        marginTop: 30
+    }
 });

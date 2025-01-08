@@ -67,7 +67,7 @@ const BarcodeScanner = () => {
       }}
     >
       <View style={styles.textContainer}>
-        <Text>Point the camera at a barcode</Text>
+        <Text style={styles.instructionText}>Point the camera at a barcode</Text>
       </View>
       <View style={styles.closeButtonContainer}>
         <YellowButton title="Close" onPress={() => navigation.navigate("HomeScreen")} /> 
@@ -94,6 +94,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 50
   },
+  instructionText: {
+    fontFamily: "Poppins",
+    fontWeight: "bold",
+    fontSize: 20,
+    color: "#FFB900"
+  }
 });
 
 export default BarcodeScanner;
