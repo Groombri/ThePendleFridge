@@ -1,39 +1,52 @@
-// CustomModal.js
 import React from 'react';
 import { Modal, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import YellowButton from './YellowButton';
 
-const DonateModal = ({ visible, onClose }) => {
+/**
+ * The modal that appears after selecting "Donate an item" in the Home Screen's header.
+ * This displays 3 options for providing information on the food item the user wishes to donate:
+ * 1. Scan the item's barcode, 2. Take a picture, 3. Enter details manually.
+ * 
+ * @param {*} param0 
+ * @returns the donation options modal
+ */
+const DonateModal = ({ visible, onClose, navigation }) => {
   return (
-    <Modal
-      transparent={true}
-      animationType="slide"
-      visible={visible}
-      onRequestClose={onClose}
-    >
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContent}>
-          <View style={styles.row}>
-            <TouchableOpacity 
-              style={styles.closeModalButton} 
-              onPress={onClose}
-            >
-              <AntDesign name="closecircle" style={styles.closeIcon} />
-            </TouchableOpacity>
+    <View style={styles.container}>
+      <Modal
+        transparent={true}
+        animationType="slide"
+        visible={visible}
+        onRequestClose={onClose}
+        >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.row}>
+              <TouchableOpacity 
+                style={styles.closeModalButton} 
+                onPress={onClose}
+              >
+                <AntDesign name="closecircle" style={styles.closeIcon} />
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.modalTitleText}>Donate a food item</Text>
+            <Text style={styles.modalText}>Choose one of the following options to provide us information about the food item: </Text>
+            <MaterialCommunityIcons name="barcode-scan" style={styles.modalIcons} />
+            <YellowButton title="Scan barcode" onPress={() => {
+              //When the "Scan barcode " btn is pressed, close the modal and navigate to BarcodeScannerScreen
+              onClose();
+              navigation.navigate("BarcodeScannerScreen");
+            }}/>
+            <MaterialCommunityIcons name="camera" style={styles.modalIcons} />
+            <YellowButton title="Take a picture" />
+            <AntDesign name="form" style={styles.modalIcons} />
+            <YellowButton title="Enter details" />
           </View>
-          <Text style={styles.modalTitleText}>Donate a food item</Text>
-          <Text style={styles.modalText}>Choose one of the following options to provide us information about the food item: </Text>
-          <MaterialCommunityIcons name="barcode-scan" style={styles.modalIcons} />
-          <YellowButton title="Scan barcode" />
-          <MaterialCommunityIcons name="camera" style={styles.modalIcons} />
-          <YellowButton title="Take a picture" />
-          <AntDesign name="form" style={styles.modalIcons} />
-          <YellowButton title="Enter details" />
         </View>
-      </View>
-    </Modal>
+      </Modal>
+    </View>
   );
 };
 
@@ -87,7 +100,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 10,
     left: 10,
-  }
+  },
 });
 
 export default DonateModal;

@@ -1,5 +1,4 @@
 import "react-native-gesture-handler";
-import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Entypo, AntDesign } from "@expo/vector-icons";
 
@@ -13,14 +12,12 @@ const Drawer = createDrawerNavigator();
 
 const DrawerNav = () => {
   return (
-    <NavigationContainer>
-      <Drawer.Navigator screenOptions={screenOptions}>
-        <Drawer.Screen name="Home" component={HomeScreen} />
-        <Drawer.Screen name="Notifications" component={NotificationsScreen} />
-        <Drawer.Screen name="How to use" component={HelpScreen} />
-        <Drawer.Screen name="About" component={AboutScreen} />
-      </Drawer.Navigator>
-    </NavigationContainer>
+    <Drawer.Navigator screenOptions={screenOptions}>
+      <Drawer.Screen name="Home" component={HomeScreen} />
+      <Drawer.Screen name="Notifications" component={NotificationsScreen} />
+      <Drawer.Screen name="How to use" component={HelpScreen} />
+      <Drawer.Screen name="About" component={AboutScreen} />
+    </Drawer.Navigator>
   );
 }
 
