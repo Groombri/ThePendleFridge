@@ -37,7 +37,7 @@ const DonateModal = ({ visible, onClose, navigation }) => {
             <YellowButton title="Scan barcode" onPress={() => {
               //When the "Scan barcode " btn is pressed, close the modal and navigate to BarcodeScannerScreen
               onClose();
-              navigation.navigate("BarcodeScannerScreen");
+              navigation.navigate("BarcodeScanner");
             }}/>
             <MaterialCommunityIcons name="camera" style={styles.modalIcons} />
             <YellowButton title="Take a picture" />

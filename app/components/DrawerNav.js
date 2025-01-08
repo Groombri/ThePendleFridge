@@ -4,6 +4,7 @@ import { Entypo, AntDesign } from "@expo/vector-icons";
 
 //import all screens
 import HomeScreen from "../screens/HomeScreen";
+import BarcodeScannerScreen from "../screens/BarcodeScannerScreen";
 import HelpScreen from "../screens/HelpScreen";
 import AboutScreen from "../screens/AboutScreen";
 import NotificationsScreen from "../screens/NotificationsScreen";
@@ -12,11 +13,16 @@ const Drawer = createDrawerNavigator();
 
 const DrawerNav = () => {
   return (
-    <Drawer.Navigator screenOptions={screenOptions}>
+    <Drawer.Navigator initialRouteName="Home" screenOptions={screenOptions}>
       <Drawer.Screen name="Home" component={HomeScreen} />
       <Drawer.Screen name="Notifications" component={NotificationsScreen} />
       <Drawer.Screen name="How to use" component={HelpScreen} />
       <Drawer.Screen name="About" component={AboutScreen} />
+      <Drawer.Screen 
+        name="BarcodeScanner" 
+        component={BarcodeScannerScreen} 
+        options={{drawerItemStyle: {display: "none"}}} //makes sure screen doesn't appear on drawer nav
+      />
     </Drawer.Navigator>
   );
 }

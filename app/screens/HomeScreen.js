@@ -4,10 +4,10 @@ import CustomHeader from '../components/CustomHeader';
 import TextStyles from '../styles/TextStyles';
 
 /**
- * The applications home screen. This includes the apps custom header + donate an item button.
+ * The application's home screen. This includes the apps custom header + donate an item button.
  * The body contains the current inventory of the fridge.
  * @param {*} navigation ...
- * @returns the contents of the Home Screen to the Stack in App.js
+ * @returns the contents of the Home Screen, initially as the initialRoute in the Drawer Navigator.
  */
 function HomeScreen({ navigation }) {
   return (
@@ -21,7 +21,7 @@ function HomeScreen({ navigation }) {
                   </Text>
                   <TouchableOpacity 
                     navigation={navigation}
-                    onPress={() => navigation.navigate("NotificationsScreen")} 
+                    onPress={() => navigation.navigate("Notifications")} 
                   >
                     <Text style={TextStyles.link}>Configure notification settings</Text>
                   </TouchableOpacity>

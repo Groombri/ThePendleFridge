@@ -70,7 +70,7 @@ const BarcodeScanner = () => {
         <Text style={styles.instructionText}>Point the camera at a barcode</Text>
       </View>
       <View style={styles.closeButtonContainer}>
-        <YellowButton title="Close" onPress={() => navigation.navigate("HomeScreen")} /> 
+        <YellowButton title="Close" onPress={() => navigation.navigate("Home")} /> 
       </View>
     </CameraView>
   );
