@@ -1,10 +1,11 @@
+import ConstructItem from "./ConstructItem";
+
 /**
  * Gets product information from OpenFoodFacts API using scanned barcode. 
- * @return the relevant product data if it is found in database.
+ * @return the relevant product data if it is found in database, as a JSON object
  * @return undefined if not found
  * @return "error" if there is an error fetching the data
  */
-
 export default GetDataFromBarcode = async (barcode) => {
     const url = `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`;
     
@@ -21,11 +22,20 @@ export default GetDataFromBarcode = async (barcode) => {
         let response = await fetch(url, {headers:{'USER-AGENT': userAgent}});
         const data = await response.json();
     
-        //if product is found in database, extract data
+        //if product is found in database, extract desired data
         if(data.product) {
             const productName = data.product.product_name;
-            console.log(data.product);
-            return productName;
+            const itemSize = data.product.quantity;
+            const labels = data.product.labels;
+            const ingredients = data.product.ingredients_text_en;
+            const allergens = data.product.allergens_tags;
+            const traces = data.product.traces;
+            const image = data.product.image_url;
+            const keywords = data.product._keywords;
+
+            //construct and return JSON object item from data
+            const foodItem = ConstructItem(barcode, productName, itemSize, labels, ingredients, allergens, traces, image, keywords);
+            return foodItem;
         }
         //return undefined if product not in database
         else {
