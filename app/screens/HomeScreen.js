@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import { StyleSheet, View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import CustomHeader from '../components/CustomHeader';
 import TextStyles from '../styles/TextStyles';
 import ReadFridge from '../utils/ReadFridge';
@@ -19,7 +20,7 @@ function HomeScreen({ navigation }) {
   useEffect(() => {
     ReadFridge((data) => {
       if(data) {
-        setFridgeContents(data);
+        setFridgeContents(data); 
       }
       else {
         console.log("NO data or ERROR");
@@ -33,8 +34,8 @@ function HomeScreen({ navigation }) {
   //if contents are loading whilst user is in the screen, display message to let them know
   const loading = (
       <View style={styles.container}>
-        <CustomHeader title="The Pendle Fridge" route="Home" navigation={navigation} />
-        <View style={styles.body}>
+        <View style={styles.loading}>
+          <MaterialIcons name="downloading" style={styles.loadingIcon}size={100} color="green" />
           <Text style={TextStyles.bodyMain}>Loading fridge contents...</Text>
         </View>
       </View>
@@ -81,6 +82,12 @@ const styles = StyleSheet.create({
     body: {
         flex: 4,
         backgroundColor: "white"
+    },
+    loading: {
+      flex: 4,
+      backgroundColor: "white",
+      alignItems: "center",
+      justifyContent: "center"
     },
     scrollView: {
         alignItems: "center",
