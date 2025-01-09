@@ -1,6 +1,10 @@
 import { getDatabase, ref, set} from "firebase/database";
 import app from "../config/firebaseConfig";
 
+/**
+ * 
+ * see https://firebase.google.com/docs/database/web/read-and-write#write_data
+ */
 export default function AddToFridge(id, productName, itemSize, ingredients, allergens, traces, image, keywords) {
 
     //if item is already in fridge
