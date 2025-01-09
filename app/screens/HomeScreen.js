@@ -12,29 +12,44 @@ import ReadFridge from '../utils/ReadFridge';
  */
 function HomeScreen({ navigation }) {
 
-  ReadFridge();
+  const fridgeContents = "null";
+  const test = ReadFridge();
+  //console.log(fridgeContents);
 
+  //if the fridge is empty, display message in the body's <ScrollView>
+  const fridgeEmptyContent = (
+    <>
+    <Image style={styles.empty_icon} source={require('../assets/images/empty.png')}/>
+    <Text style={TextStyles.bodyMain}>
+      It looks like there's no food in at the moment...
+    </Text>
+    <TouchableOpacity 
+      navigation={navigation}
+      onPress={() => navigation.navigate("Notifications")} 
+    >
+      <Text style={TextStyles.link}>Configure notification settings</Text>
+    </TouchableOpacity>
+    <Text style={TextStyles.bodyMain}>to know when food is next donated.</Text>
+    </>
+  );
+
+  //if the fridge is not empty, display it's contents in the <ScrollView>
+  const fridgeNotEmptyContent = (
+    <Text style={TextStyles.bodyMain}>{fridgeContents}</Text>
+  );
+  
   return (
-      <View style={styles.container}>
-          <CustomHeader title="The Pendle Fridge" route="Home" navigation={navigation} />
-          <View style={styles.body}>
-              <ScrollView contentContainerStyle={styles.scrollView}>
-                  <Image style={styles.empty_icon} source={require('../assets/images/empty.png')}/>
-                  <Text style={TextStyles.bodyMain}>
-                    It looks like there's no food in at the moment...
-                  </Text>
-                  <TouchableOpacity 
-                    navigation={navigation}
-                    onPress={() => navigation.navigate("Notifications")} 
-                  >
-                    <Text style={TextStyles.link}>Configure notification settings</Text>
-                  </TouchableOpacity>
-                  <Text style={TextStyles.bodyMain}>to know when food is next donated.</Text>
-              </ScrollView>
-          </View>
-      </View>
-    );
-  }
+    <View style={styles.container}>
+        <CustomHeader title="The Pendle Fridge" route="Home" navigation={navigation} />
+        <View style={styles.body}>
+            <ScrollView contentContainerStyle={styles.scrollView}>
+                {fridgeContents === "null" ? fridgeEmptyContent : fridgeNotEmptyContent}
+            </ScrollView>
+        </View>
+    </View>
+  );
+}
+  
 
 const styles = StyleSheet.create({
     container: {
@@ -53,7 +68,6 @@ const styles = StyleSheet.create({
         height: 300,
         marginTop: 20,
         marginBottom: 20
-        
     }
 });
 
