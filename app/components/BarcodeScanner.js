@@ -56,17 +56,9 @@ const BarcodeScanner = () => {
 
   //Processes the scanned data
   const handleScannedData = async ({ type, data }) => {
-    
     //gets the product information as JSON object
     const scannedItem = await GetDataFromBarcode(data); 
     console.log(scannedItem);
-
-    //if item is already in fridge
-    //increase item quantity by entered quantity
-    //increase fridge quantity
-    
-    //if item not in fridge
-    //adds item to fridge
   }
 
   return (

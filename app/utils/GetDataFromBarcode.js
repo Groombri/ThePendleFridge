@@ -1,4 +1,5 @@
 import ConstructItem from "./ConstructItem";
+import AddToFridge from "./AddToFridge";
 
 /**
  * Gets product information from OpenFoodFacts API using scanned barcode. 
@@ -33,8 +34,11 @@ export default GetDataFromBarcode = async (barcode) => {
             const image = data.product.image_url;
             const keywords = data.product._keywords;
 
-            //construct and return JSON object item from data
-            const foodItem = ConstructItem(barcode, productName, itemSize, labels, ingredients, allergens, traces, image, keywords);
+            //add food item to fridge
+            AddToFridge(barcode, productName, itemSize, ingredients, allergens, traces, image, keywords);
+            
+            //construct and return JSON object item from data for console use 
+            const foodItem = ConstructItem(barcode, productName, itemSize, ingredients, allergens, traces, image, keywords);
             return foodItem;
         }
         //return undefined if product not in database

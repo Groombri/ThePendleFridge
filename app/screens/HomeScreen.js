@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
 import CustomHeader from '../components/CustomHeader';
 import TextStyles from '../styles/TextStyles';
+import ReadFridge from '../utils/ReadFridge';
 
 /**
  * The application's home screen. This includes the apps custom header + donate an item button.
@@ -10,6 +11,9 @@ import TextStyles from '../styles/TextStyles';
  * @returns the contents of the Home Screen, initially as the initialRoute in the Drawer Navigator.
  */
 function HomeScreen({ navigation }) {
+
+  ReadFridge();
+
   return (
       <View style={styles.container}>
           <CustomHeader title="The Pendle Fridge" route="Home" navigation={navigation} />
