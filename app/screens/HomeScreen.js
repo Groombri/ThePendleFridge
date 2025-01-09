@@ -12,9 +12,16 @@ import ReadFridge from '../utils/ReadFridge';
  */
 function HomeScreen({ navigation }) {
 
-  const fridgeContents = "null";
-  const test = ReadFridge();
-  //console.log(fridgeContents);
+  let fridgeContents = "null";
+
+  ReadFridge((data) => {
+    if(data) {
+      console.log("DATA!", data);
+    }
+    else {
+      console.log("NO data or ERROR");
+    }
+  });
 
   //if the fridge is empty, display message in the body's <ScrollView>
   const fridgeEmptyContent = (

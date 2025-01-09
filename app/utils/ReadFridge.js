@@ -1,16 +1,23 @@
-import { getDatabase, ref, child, get } from "firebase/database";
+import { getDatabase, ref, onValue } from "firebase/database";
+import app from "../config/firebaseConfig";
 
-export default function ReadFridge() {
-    const dbRef = ref(getDatabase());
-    get(child(dbRef, 'product/')).then((snapshot) => {
-        if(snapshot.exists()) {
-            console.log(snapshot.val());
-        } 
-        else {
-            console.log("No data available");
-        }
-    }).catch((error) => {
-        console.error(error);
+/**
+ * Reads the fridge's contents.
+ * Async data handled with callback, if the fridge is populated, 
+ * the callback will handle the data.
+ * @param {*} onData the callback function to handle the data
+ * see https://firebase.google.com/docs/database/web/read-and-write#read_data
+ */
+export default function ReadFridge(onData) {
+    const db = getDatabase(app);
+    const productRef = ref(db, 'product/');
+    onValue(productRef, (snapshot) => {
+        const data = snapshot.val();
+        onData(data);
+    }, (error) => {
+        console.error("Error reading database: ", error);
+        onData(null);
     });
 }
+
 
