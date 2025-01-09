@@ -1,4 +1,4 @@
-import React from 'react';
+import { React, useState, useEffect } from 'react';
 import { StyleSheet, View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
 import CustomHeader from '../components/CustomHeader';
 import TextStyles from '../styles/TextStyles';
@@ -12,16 +12,33 @@ import ReadFridge from '../utils/ReadFridge';
  */
 function HomeScreen({ navigation }) {
 
-  let fridgeContents = "null";
+  const [fridgeContents, setFridgeContents] = useState(null);   //fridge contents are set to null by default
+  const [loadingContents, setLoadingContents] = useState(true); //loads fridge contents from start
 
-  ReadFridge((data) => {
-    if(data) {
-      console.log("DATA!", data);
-    }
-    else {
-      console.log("NO data or ERROR");
-    }
-  });
+  //Read the fridges contents when HomeScreen mounts
+  useEffect(() => {
+    ReadFridge((data) => {
+      if(data) {
+        setFridgeContents(data);
+      }
+      else {
+        console.log("NO data or ERROR");
+        setFridgeContents(null);
+      }
+      //once contents have been loaded, set loading to false
+      setLoadingContents(false);
+    });
+  },[]);
+
+  //if contents are loading whilst user is in the screen, display message to let them know
+  const loading = (
+      <View style={styles.container}>
+        <CustomHeader title="The Pendle Fridge" route="Home" navigation={navigation} />
+        <View style={styles.body}>
+          <Text style={TextStyles.bodyMain}>Loading fridge contents...</Text>
+        </View>
+      </View>
+    );
 
   //if the fridge is empty, display message in the body's <ScrollView>
   const fridgeEmptyContent = (
@@ -42,7 +59,7 @@ function HomeScreen({ navigation }) {
 
   //if the fridge is not empty, display it's contents in the <ScrollView>
   const fridgeNotEmptyContent = (
-    <Text style={TextStyles.bodyMain}>{fridgeContents}</Text>
+    <Text style={TextStyles.bodyMain}>{JSON.stringify(fridgeContents)}</Text>
   );
   
   return (
@@ -50,14 +67,13 @@ function HomeScreen({ navigation }) {
         <CustomHeader title="The Pendle Fridge" route="Home" navigation={navigation} />
         <View style={styles.body}>
             <ScrollView contentContainerStyle={styles.scrollView}>
-                {fridgeContents === "null" ? fridgeEmptyContent : fridgeNotEmptyContent}
+                {loadingContents ? loading : (fridgeContents === "null" ? fridgeEmptyContent : fridgeNotEmptyContent)}
             </ScrollView>
         </View>
     </View>
   );
 }
   
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
