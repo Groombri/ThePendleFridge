@@ -24,6 +24,7 @@ export default GetDataFromBarcode = async (barcode) => {
         //if product is found in database, extract data
         if(data.product) {
             const productName = data.product.product_name;
+            console.log(data.product);
             return productName;
         }
         //return undefined if product not in database

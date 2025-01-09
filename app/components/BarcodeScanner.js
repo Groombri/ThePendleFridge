@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { CameraView, Camera } from "expo-camera";
 import { StyleSheet, Text, View } from "react-native";
-import YellowButton from "./components/YellowButton";
-import GetDataFromBarcode from "./utils/GetDataFromBarcode";
+import YellowButton from "./YellowButton";
+import GetDataFromBarcode from "../utils/GetDataFromBarcode";
 
 /**
  * A barcode scanner that scans EAN-13 barcodes using expo-camera.
