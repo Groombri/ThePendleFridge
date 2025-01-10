@@ -58,8 +58,12 @@ function HomeScreen({ navigation }) {
     </>
   );
 
-  //if the fridge is not empty, display it's contents in the <ScrollView>
-  const fridgeNotEmptyContent = renderProducts(fridgeContents);
+  let fridgeNotEmptyContent;
+  
+  //if fridge contents have been loaded, render the products
+  if(!loadingContents) {
+    fridgeNotEmptyContent = renderProducts(fridgeContents);
+  }
   
   return (
     <View style={styles.container}>
