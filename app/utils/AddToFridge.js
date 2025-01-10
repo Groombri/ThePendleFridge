@@ -1,8 +1,9 @@
-import { getDatabase, ref, set, get } from "firebase/database";
+import { getDatabase, ref, set, get, child } from "firebase/database";
 import app from "../config/firebaseConfig";
 
 /**
- * 
+ * Function that takes a foodItem and adds it to the fridge.
+ * If the item already exists in the fridge, it will update the quantity.
  * see https://firebase.google.com/docs/database/web/read-and-write#write_data
  * and https://firebase.google.com/docs/database/web/read-and-write#read_data_once
  */
@@ -17,19 +18,15 @@ export default function AddToFridge(foodItem) {
     const image = foodItem["image"];
     const keywords = foodItem["keywords"];
 
-    //if item is already in fridge
-    //increase item quantity by entered quantity
-    //increase fridge quantity
-    
-    //if item not in fridge
-    //adds item to fridge
-    const db = getDatabase(app);
-    const productRef = ref(db, 'product/' + id);
+    //get reference to database and productId
+    const dbRef = ref(getDatabase(app));
+    const productRef = child(dbRef, 'product/' + id);
 
+    //check if the productId is already in the fridge database
     get(productRef).then((snapshot) => {
         if(snapshot.exists()) {
-            console.log("EXISTING PRODUCT!");
             
+            //if the product exists, update the quantity
             const existingProduct = snapshot.val();
             const newQuantity = existingProduct.quantity + 1;
 
@@ -44,9 +41,8 @@ export default function AddToFridge(foodItem) {
                 keywords
             });
         }
-        else {
-            console.log("NEW PRODUCT!");
-
+        else { //if this product is not in the fridge, add it
+            
             set(productRef, {
                 name: productName,
                 quantity: 1,
@@ -61,7 +57,4 @@ export default function AddToFridge(foodItem) {
     }).catch((error) => {
         console.error(error);
     });
-
-
-    console.log("Add to fridge successful!");
 }
