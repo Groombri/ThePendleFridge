@@ -11,13 +11,13 @@ export default function AddToFridge(foodItem) {
 
     //assigns properties to those of foodItem. Deals with if a property is empty (undefined)
     const id = foodItem["productId"];
-    const productName = handleUndefined("name");
-    const itemSize = handleUndefined("size");
-    const ingredients = handleUndefined("ingredients");
-    const allergens = handleUndefined("allergens");
-    const traces = handleUndefined("traces");
-    const image = handleUndefined("image");
-    const keywords = handleUndefined("keywords");
+    const productName = handleUndefined(foodItem, "name");
+    const itemSize = handleUndefined(foodItem, "size");
+    const ingredients = handleUndefined(foodItem, "ingredients");
+    const allergens = handleUndefined(foodItem, "allergens");
+    const traces = handleUndefined(foodItem, "traces");
+    const image = handleUndefined(foodItem, "image");
+    const keywords = handleUndefined(foodItem, "keywords");
 
     //get reference to database and productId
     const dbRef = ref(getDatabase(app));
