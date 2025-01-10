@@ -1,9 +1,10 @@
-import { getDatabase, ref, set} from "firebase/database";
+import { getDatabase, ref, set, get } from "firebase/database";
 import app from "../config/firebaseConfig";
 
 /**
  * 
  * see https://firebase.google.com/docs/database/web/read-and-write#write_data
+ * and https://firebase.google.com/docs/database/web/read-and-write#read_data_once
  */
 export default function AddToFridge(foodItem) {
 
@@ -23,16 +24,44 @@ export default function AddToFridge(foodItem) {
     //if item not in fridge
     //adds item to fridge
     const db = getDatabase(app);
-    set(ref(db, 'product/' + id), {
-        name: productName,
-        quantity: 1,
-        size: itemSize,
-        ingredients,
-        allergens,
-        traces,
-        image,
-        keywords
+    const productRef = ref(db, 'product/' + id);
+
+    get(productRef).then((snapshot) => {
+        if(snapshot.exists()) {
+            console.log("EXISTING PRODUCT!");
+            
+            const existingProduct = snapshot.val();
+            const newQuantity = existingProduct.quantity + 1;
+
+            set(productRef, {
+                name: productName,
+                quantity: newQuantity,
+                size: itemSize,
+                ingredients,
+                allergens,
+                traces,
+                image,
+                keywords
+            });
+        }
+        else {
+            console.log("NEW PRODUCT!");
+
+            set(productRef, {
+                name: productName,
+                quantity: 1,
+                size: itemSize,
+                ingredients,
+                allergens,
+                traces,
+                image,
+                keywords
+            });
+        }
+    }).catch((error) => {
+        console.error(error);
     });
+
 
     console.log("Add to fridge successful!");
 }
