@@ -1,9 +1,9 @@
-import { React, useState, useEffect } from 'react';
-import { StyleSheet, View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { React, useState, useEffect, useCallback } from 'react';
+import { StyleSheet, View, Text, ScrollView, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import CustomHeader from '../components/CustomHeader';
 import TextStyles from '../styles/TextStyles';
 import ReadFridge from '../utils/ReadFridge';
+import { RefreshControl } from 'react-native-gesture-handler';
 
 /**
  * The application's home screen. This includes the apps custom header + donate an item button.
@@ -13,6 +13,7 @@ import ReadFridge from '../utils/ReadFridge';
  */
 function HomeScreen({ navigation }) {
 
+  const [refreshing, setRefreshing] = useState(false);
   const [fridgeContents, setFridgeContents] = useState(null);   //fridge contents are set to null by default
   const [loadingContents, setLoadingContents] = useState(true); //loads fridge contents from start
 
@@ -31,11 +32,19 @@ function HomeScreen({ navigation }) {
     });
   },[]);
 
+  //https://reactnative.dev/docs/refreshcontrol
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  }, []);
+
   //if contents are loading whilst user is in the screen, display message to let them know
   const loading = (
       <View style={styles.container}>
         <View style={styles.loading}>
-          <MaterialIcons name="downloading" style={styles.loadingIcon}size={100} color="green" />
+          <ActivityIndicator size="large" style={{margin: 10}}/>
           <Text style={TextStyles.bodyMain}>Loading fridge contents...</Text>
         </View>
       </View>
@@ -58,20 +67,56 @@ function HomeScreen({ navigation }) {
     </>
   );
 
-  //if the fridge is not empty, display it's contents in the <ScrollView>
-  const fridgeNotEmptyContent = (
-    <Text style={TextStyles.bodyMain}>{JSON.stringify(fridgeContents)}</Text>
-  );
+  let fridgeNotEmptyContent;
+  
+  //if fridge contents have been loaded, render the products
+  if(!loadingContents) {
+    fridgeNotEmptyContent = renderProducts(fridgeContents);
+  }
   
   return (
     <View style={styles.container}>
         <CustomHeader title="The Pendle Fridge" route="Home" navigation={navigation} />
         <View style={styles.body}>
-            <ScrollView contentContainerStyle={styles.scrollView}>
+            <ScrollView 
+              contentContainerStyle={styles.scrollView}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
+            >
                 {loadingContents ? loading : (fridgeContents === "null" ? fridgeEmptyContent : fridgeNotEmptyContent)}
             </ScrollView>
         </View>
     </View>
+  );
+}
+
+/**
+ * Takes the entire contents of the fridge and displays each individual item
+ * @param {*} fridgeContents the entire contents of the fridge as a JSON string
+ */
+function renderProducts(fridgeContents) {
+  return (
+    <>
+      <View style={styles.inventoryHeader}>
+        <Text style={TextStyles.bodyTitle}>What's in?</Text>
+      </View>
+      {Object.entries(fridgeContents).map(([id, product]) => (
+        <View 
+          style={styles.productWrapper}
+          key={id}
+        >
+          <TouchableOpacity 
+            activeOpacity={0.7}
+            style={styles.productInfo}
+          >
+            <Image source={{ uri: product.image }} style={styles.productImage} />
+            <Text style={TextStyles.bodyMain}>{product.name}</Text>
+            <Text style={{fontSize: 20}}>→</Text>
+          </TouchableOpacity>
+        </View>
+      ))}
+    </>
   );
 }
   
@@ -98,7 +143,34 @@ const styles = StyleSheet.create({
         height: 300,
         marginTop: 20,
         marginBottom: 20
-    }
+    },
+    productWrapper: {
+      width: "90%",
+      marginTop: 15,
+      borderWidth: 1.5,
+      borderColor: "rgba(0, 0, 0, 0.2)",
+      borderRadius: 5,
+      shadowColor: 'black',
+      shadowOffset: { width: 3, height: 3 },
+      shadowOpacity: 0.3,
+      shadowRadius: 2,
+      elevation: 5,
+      backgroundColor: "white",
+    },
+    productInfo: {
+      padding: 10,
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    productImage: {
+      width: 50,
+      height: 50,
+      marginRight: 10
+    },
+    inventoryHeader: {
+      width: "90%",
+      padding: 5
+    },
 });
 
 export default HomeScreen;

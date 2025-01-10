@@ -4,6 +4,7 @@ import { CameraView, Camera } from "expo-camera";
 import { StyleSheet, Text, View } from "react-native";
 import YellowButton from "./YellowButton";
 import GetDataFromBarcode from "../utils/GetDataFromBarcode";
+import AddToFridge from "../utils/AddToFridge";
 
 /**
  * A barcode scanner that scans EAN-13 barcodes using expo-camera.
@@ -51,6 +52,7 @@ const BarcodeScanner = () => {
 
     setScanned(true);
     handleScannedData({type, data});
+    setScanned(false); //reset scanned state to allow for multiple scans
     navigation.navigate("Home");
   };
 
@@ -59,6 +61,8 @@ const BarcodeScanner = () => {
     //gets the product information as JSON object
     const scannedItem = await GetDataFromBarcode(data); 
     console.log(scannedItem);
+
+    AddToFridge(scannedItem);
   }
 
   return (
