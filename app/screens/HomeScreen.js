@@ -1,8 +1,9 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useCallback } from 'react';
 import { StyleSheet, View, Text, ScrollView, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import CustomHeader from '../components/CustomHeader';
 import TextStyles from '../styles/TextStyles';
 import ReadFridge from '../utils/ReadFridge';
+import { RefreshControl } from 'react-native-gesture-handler';
 
 /**
  * The application's home screen. This includes the apps custom header + donate an item button.
@@ -12,6 +13,7 @@ import ReadFridge from '../utils/ReadFridge';
  */
 function HomeScreen({ navigation }) {
 
+  const [refreshing, setRefreshing] = useState(false);
   const [fridgeContents, setFridgeContents] = useState(null);   //fridge contents are set to null by default
   const [loadingContents, setLoadingContents] = useState(true); //loads fridge contents from start
 
@@ -29,6 +31,14 @@ function HomeScreen({ navigation }) {
       setLoadingContents(false);
     });
   },[]);
+
+  //https://reactnative.dev/docs/refreshcontrol
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  }, []);
 
   //if contents are loading whilst user is in the screen, display message to let them know
   const loading = (
@@ -68,7 +78,12 @@ function HomeScreen({ navigation }) {
     <View style={styles.container}>
         <CustomHeader title="The Pendle Fridge" route="Home" navigation={navigation} />
         <View style={styles.body}>
-            <ScrollView contentContainerStyle={styles.scrollView}>
+            <ScrollView 
+              contentContainerStyle={styles.scrollView}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
+            >
                 {loadingContents ? loading : (fridgeContents === "null" ? fridgeEmptyContent : fridgeNotEmptyContent)}
             </ScrollView>
         </View>
