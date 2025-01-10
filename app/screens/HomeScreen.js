@@ -44,7 +44,7 @@ function HomeScreen({ navigation }) {
   const loading = (
       <View style={styles.container}>
         <View style={styles.loading}>
-          <ActivityIndicator size="large" color="green" style={{margin: 10}}/>
+          <ActivityIndicator size="large" style={{margin: 10}}/>
           <Text style={TextStyles.bodyMain}>Loading fridge contents...</Text>
         </View>
       </View>
