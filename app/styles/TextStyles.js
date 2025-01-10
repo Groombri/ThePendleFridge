@@ -14,6 +14,8 @@ export default StyleSheet.create({
     bodyMain: {
         fontFamily: "Poppins",
         fontSize: 20,
+        flex: 1,
+        flexWrap : "wrap"
     },
     link: {
         fontFamily: "Poppins",

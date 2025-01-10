@@ -124,10 +124,11 @@ const styles = StyleSheet.create({
       padding: 10,
       marginTop: 15,
       borderWidth: 1.5,
-      borderColor: "black",
+      borderColor: "rgba(0, 100, 0, 0.5)",
       borderRadius: 5,
       flexDirection: "row",
       alignItems: "center",
+      backgroundColor: "rgba(255, 185, 0, 0.075)"
     },
     productImage: {
       width: 50,
