@@ -87,15 +87,19 @@ function renderProducts(fridgeContents) {
         <Text style={TextStyles.bodyTitle}>What's in?</Text>
       </View>
       {Object.entries(fridgeContents).map(([id, product]) => (
-        <TouchableOpacity 
+        <View 
+          style={styles.productWrapper}
           key={id}
-          activeOpacity={0.7}
-          style={styles.productDropDown}
         >
-          <Image source={{ uri: product.image }} style={styles.productImage} />
-          <Text style={TextStyles.bodyMain}>{product.name}</Text>
-          <Text style={{fontSize: 20}}>→</Text>
-        </TouchableOpacity>
+          <TouchableOpacity 
+            activeOpacity={0.7}
+            style={styles.productInfo}
+          >
+            <Image source={{ uri: product.image }} style={styles.productImage} />
+            <Text style={TextStyles.bodyMain}>{product.name}</Text>
+            <Text style={{fontSize: 20}}>→</Text>
+          </TouchableOpacity>
+        </View>
       ))}
     </>
   );
@@ -125,16 +129,23 @@ const styles = StyleSheet.create({
         marginTop: 20,
         marginBottom: 20
     },
-    productDropDown: {
+    productWrapper: {
       width: "90%",
-      padding: 10,
       marginTop: 15,
       borderWidth: 1.5,
-      borderColor: "rgba(0, 100, 0, 0.5)",
+      borderColor: "rgba(0, 0, 0, 0.2)",
       borderRadius: 5,
+      shadowColor: 'black',
+      shadowOffset: { width: 3, height: 3 },
+      shadowOpacity: 0.3,
+      shadowRadius: 2,
+      elevation: 5,
+      backgroundColor: "white",
+    },
+    productInfo: {
+      padding: 10,
       flexDirection: "row",
       alignItems: "center",
-      backgroundColor: "rgba(255, 185, 0, 0.075)"
     },
     productImage: {
       width: 50,
