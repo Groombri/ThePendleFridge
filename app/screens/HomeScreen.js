@@ -84,12 +84,19 @@ function HomeScreen({ navigation }) {
 function renderProducts(fridgeContents) {
   return (
     <>
-      <Text style={TextStyles.bodyTitle}>What's in?</Text>
+      <View style={styles.inventoryHeader}>
+        <Text style={TextStyles.bodyTitle}>What's in?</Text>
+      </View>
       {Object.entries(fridgeContents).map(([id, product]) => (
-        <View key={id} style={styles.productDropDown}>
-           <Image source={{ uri: product.image }} style={styles.productImage} />
-           <Text style={TextStyles.bodyMain}>{product.name}</Text>
-        </View>
+        <TouchableOpacity 
+          key={id}
+          activeOpacity={0.7}
+          style={styles.productDropDown}
+        >
+          <Image source={{ uri: product.image }} style={styles.productImage} />
+          <Text style={TextStyles.bodyMain}>{product.name}</Text>
+          <Text style={{fontSize: 20}}>→</Text>
+        </TouchableOpacity>
       ))}
     </>
   );
@@ -134,7 +141,11 @@ const styles = StyleSheet.create({
       width: 50,
       height: 50,
       marginRight: 10
-    }
+    },
+    inventoryHeader: {
+      width: "90%",
+      padding: 5
+    },
 });
 
 export default HomeScreen;
