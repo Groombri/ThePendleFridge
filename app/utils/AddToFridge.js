@@ -9,14 +9,15 @@ import app from "../config/firebaseConfig";
  */
 export default function AddToFridge(foodItem) {
 
+    //assigns properties to those of foodItem. Deals with if a property is empty (undefined)
     const id = foodItem["productId"];
-    const productName = foodItem["name"];
-    const itemSize = foodItem["size"];
-    const ingredients = foodItem["ingredients"];
-    const allergens = foodItem["allergens"];
-    const traces = foodItem["traces"];
-    const image = foodItem["image"];
-    const keywords = foodItem["keywords"];
+    const productName = handleUndefined("name");
+    const itemSize = handleUndefined("size");
+    const ingredients = handleUndefined("ingredients");
+    const allergens = handleUndefined("allergens");
+    const traces = handleUndefined("traces");
+    const image = handleUndefined("image");
+    const keywords = handleUndefined("keywords");
 
     //get reference to database and productId
     const dbRef = ref(getDatabase(app));
@@ -57,4 +58,18 @@ export default function AddToFridge(foodItem) {
     }).catch((error) => {
         console.error(error);
     });
+}
+
+/**
+ * In some cases, the data about a product from OpenFoodFacts may be partially complete.
+ * This should not stop the program, as users are given the option to fill in missing details.
+ * What's more, some details e.g. keywords are not required for an item to be donated.
+ * @returns a generic food image if the image doesn't exist
+ * @returns an empty string if any other property is incomplete
+ */
+function handleUndefined(foodItem, property) {
+    if(property === "image") {
+        return foodItem[property] === undefined ? "QUESTION MARK" : foodItem[property];
+    }
+    return foodItem[property] === undefined ? "" : foodItem[property];
 }
