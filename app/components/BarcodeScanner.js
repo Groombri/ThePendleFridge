@@ -52,6 +52,7 @@ const BarcodeScanner = () => {
 
     setScanned(true);
     handleScannedData({type, data});
+    setScanned(false); //reset scanned state to allow for multiple scans
     navigation.navigate("Home");
   };
 
