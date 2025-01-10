@@ -20,5 +20,5 @@ export default StyleSheet.create({
         fontSize: 20,
         color: "green",
         marginTop: 30
-    }
+    },
 });

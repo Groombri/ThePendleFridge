@@ -59,9 +59,7 @@ function HomeScreen({ navigation }) {
   );
 
   //if the fridge is not empty, display it's contents in the <ScrollView>
-  const fridgeNotEmptyContent = (
-    <Text style={TextStyles.bodyMain}>{JSON.stringify(fridgeContents)}</Text>
-  );
+  const fridgeNotEmptyContent = renderProducts(fridgeContents);
   
   return (
     <View style={styles.container}>
@@ -72,6 +70,24 @@ function HomeScreen({ navigation }) {
             </ScrollView>
         </View>
     </View>
+  );
+}
+
+/**
+ * Takes the entire contents of the fridge and displays each individual item
+ * @param {*} fridgeContents the entire contents of the fridge as a JSON string
+ */
+function renderProducts(fridgeContents) {
+  return (
+    <>
+      <Text style={TextStyles.bodyTitle}>What's in?</Text>
+      {Object.entries(fridgeContents).map(([id, product]) => (
+        <View key={id} style={styles.productDropDown}>
+           <Image source={{ uri: product.image }} style={styles.productImage} />
+           <Text style={TextStyles.bodyMain}>{product.name}</Text>
+        </View>
+      ))}
+    </>
   );
 }
   
@@ -98,6 +114,21 @@ const styles = StyleSheet.create({
         height: 300,
         marginTop: 20,
         marginBottom: 20
+    },
+    productDropDown: {
+      width: "90%",
+      padding: 10,
+      marginTop: 15,
+      borderWidth: 1.5,
+      borderColor: "black",
+      borderRadius: 5,
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    productImage: {
+      width: 50,
+      height: 50,
+      marginRight: 10
     }
 });
 
