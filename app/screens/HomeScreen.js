@@ -1,6 +1,5 @@
 import { React, useState, useEffect } from 'react';
-import { StyleSheet, View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { StyleSheet, View, Text, ScrollView, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import CustomHeader from '../components/CustomHeader';
 import TextStyles from '../styles/TextStyles';
 import ReadFridge from '../utils/ReadFridge';
@@ -35,7 +34,7 @@ function HomeScreen({ navigation }) {
   const loading = (
       <View style={styles.container}>
         <View style={styles.loading}>
-          <MaterialIcons name="downloading" style={styles.loadingIcon}size={100} color="green" />
+          <ActivityIndicator size="large" color="green" style={{margin: 10}}/>
           <Text style={TextStyles.bodyMain}>Loading fridge contents...</Text>
         </View>
       </View>
