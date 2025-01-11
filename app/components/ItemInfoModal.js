@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useState } from "react";
 import {
   Modal,
   View,
@@ -16,6 +16,14 @@ import AddToFridge from "../utils/AddToFridge";
 
 const ItemInfoModal = ({ visible, onClose, navigation, scannedItem }) => {
   if (scannedItem !== null) {
+    //set default values for text fields as scanned information
+    const [name, setName] = useState(scannedItem.name);
+    const [size, setSize] = useState(scannedItem.size);
+    const [quantity, setQuantity] = useState(scannedItem.quantity);
+    const [allergens, setAllergens] = useState(scannedItem.allergens);
+    const [traces, setTraces] = useState(scannedItem.traces);
+    const [ingredients, setIngredients] = useState(scannedItem.ingredients);
+
     return (
       <View style={styles.container}>
         <Modal
@@ -42,39 +50,61 @@ const ItemInfoModal = ({ visible, onClose, navigation, scannedItem }) => {
                 <Text style={styles.modalText}>
                   Some data from the barcode scan maybe missing or incorrect.{" "}
                 </Text>
+                <Image
+                  source={{ uri: scannedItem.image }}
+                  style={styles.productImage}
+                />
                 <View style={styles.fieldContainer}>
                   <Text style={styles.requiredField}>Product name*: </Text>
                   <TextInput
                     style={styles.textInput}
-                    value={scannedItem["name"]}
+                    defaultValue={name}
+                    onChangeText={(newName) => setName(newName)}
                   />
                   {/* <Image></Image> */}
                   <Text style={styles.modalText}>Product size: </Text>
                   <TextInput
                     style={styles.textInput}
-                    value={scannedItem["size"]}
+                    defaultValue={size}
+                    onChangeText={(newSize) => setSize(newSize)}
                     multiline={true}
                   />
                   <Text style={styles.requiredField}>Quantity*: </Text>
                   <TextInput
                     style={styles.textInput}
-                    value={JSON.stringify(scannedItem["quantity"])}
+                    defaultValue={quantity.toString()} //converts quantity to string for display in text input
+                    onChangeText={
+                      (newQuantity) => setQuantity(Number(newQuantity)) //converts text back into a number
+                    }
                   />
                   <Text style={styles.modalText}>Allergens: </Text>
                   <TextInput
                     style={styles.textInput}
-                    value={JSON.stringify(scannedItem["allergens"])}
+                    defaultValue={
+                      allergens.length === 0 ? "" : allergens.join(", ") //converts array of allergns to string
+                    }
+                    onChangeText={(newAllergens) =>
+                      setAllergens(
+                        newAllergens
+                          .split(", ")
+                          .map((allergen) => allergen.trim()) //converts string input text back into array
+                      )
+                    }
                   />
                   <Text style={styles.modalText}>May contain traces of: </Text>
                   <TextInput
                     style={styles.textInput}
-                    value={scannedItem["traces"]}
+                    defaultValue={traces}
+                    onChangeText={(newTraces) => setTraces(newTraces)}
                     multiline={true}
                   />
                   <Text style={styles.modalText}>Ingredients: </Text>
                   <TextInput
                     style={styles.textInput}
-                    value={scannedItem["ingredients"]}
+                    defaultValue={ingredients}
+                    onChangeText={(newIngredients) =>
+                      setIngredients(newIngredients)
+                    }
                     multiline={true}
                   />
                 </View>
@@ -90,20 +120,20 @@ const ItemInfoModal = ({ visible, onClose, navigation, scannedItem }) => {
         </Modal>
       </View>
     );
+
+    function validateInfo(scannedItem) {
+      console.log(name);
+
+      //for each field, validate
+      //if not valid, alert and highlight field
+
+      //   else {
+      //     const finalItem = ConstructItem(scannedItem["productId"], ...);
+      //     AddToFridge(finalItem);
+      //   }
+    }
   }
 };
-
-function validateInfo(scannedItem) {
-  console.log("DOMATE!");
-
-  //for each field, validate
-  //if not valid, alert and highlight field
-
-  //   else {
-  //     const finalItem = ConstructItem(scannedItem["productId"], ...);
-  //     AddToFridge(finalItem);
-  //   }
-}
 
 const styles = StyleSheet.create({
   modalOverlay: {
@@ -157,8 +187,8 @@ const styles = StyleSheet.create({
     left: 10,
   },
   fieldContainer: {
-    marginTop: 35,
-    marginBottom: 35,
+    marginTop: 15,
+    marginBottom: 20,
   },
   textInput: {
     width: 300,
@@ -178,6 +208,11 @@ const styles = StyleSheet.create({
   scrollView: {
     justifyContent: "center",
     alignItems: "center",
+  },
+  productImage: {
+    width: 50,
+    height: 50,
+    marginTop: 10,
   },
 });
 
