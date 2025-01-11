@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, ScrollView, Image, TouchableOpacity, ActivityIn
 import CustomHeader from '../components/CustomHeader';
 import TextStyles from '../styles/TextStyles';
 import ReadFridge from '../utils/ReadFridge';
+import ItemInfoModal from '../components/ItemInfoModal';
 import { RefreshControl } from 'react-native-gesture-handler';
 
 /**
@@ -11,14 +12,21 @@ import { RefreshControl } from 'react-native-gesture-handler';
  * @param {*} navigation ...
  * @returns the contents of the Home Screen, initially as the initialRoute in the Drawer Navigator.
  */
-function HomeScreen({ navigation }) {
-
+function HomeScreen({ navigation, route }) {
+  const [scannedItem, setScannedItem] = useState(null);  //stores an item that has been scanned
+  const [isItemInfoModalVisible, setItemInfoModalVisible] = useState(false);  //the modal that displays the info of the scannedItem
   const [refreshing, setRefreshing] = useState(false);
   const [fridgeContents, setFridgeContents] = useState(null);   //fridge contents are set to null by default
   const [loadingContents, setLoadingContents] = useState(true); //loads fridge contents from start
 
   //Read the fridges contents when HomeScreen mounts
   useEffect(() => {
+    //if a scanned item has been passed into the home screen, store the item and display modal
+    if(route.params?.scannedItem) {
+      setScannedItem(route.params.scannedItem);
+      setItemInfoModalVisible(true);
+    }
+    
     ReadFridge((data) => {
       if(data) {
         setFridgeContents(data); 
@@ -30,7 +38,7 @@ function HomeScreen({ navigation }) {
       //once contents have been loaded, set loading to false
       setLoadingContents(false);
     });
-  },[]);
+  },[route.params]);
 
   //https://reactnative.dev/docs/refreshcontrol
   const onRefresh = useCallback(() => {
@@ -87,6 +95,12 @@ function HomeScreen({ navigation }) {
                 {loadingContents ? loading : (fridgeContents === "null" ? fridgeEmptyContent : fridgeNotEmptyContent)}
             </ScrollView>
         </View>
+        <ItemInfoModal 
+          isVisible={isItemInfoModalVisible}
+          scannedItem={scannedItem}
+          onClose={() => {setItemInfoModalVisible(false)}}
+          navigation={navigation}
+        />
     </View>
   );
 }

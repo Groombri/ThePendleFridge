@@ -52,17 +52,20 @@ const BarcodeScanner = () => {
 
     setScanned(true);
     handleScannedData({type, data});
-    setScanned(false); //reset scanned state to allow for multiple scans
-    navigation.navigate("Home");
   };
 
   //Processes the scanned data
   const handleScannedData = async ({ type, data }) => {
+    
+    setScanned(false); //reset scanned state to allow for multiple scans
+    
     //gets the product information as JSON object
     const scannedItem = await GetDataFromBarcode(data); 
     console.log(scannedItem);
 
-    AddToFridge(scannedItem);
+    //parses the scannedItem into the home screen so it can display the ItemInfoModal
+    navigation.navigate("Home", { scannedItem });
+    //AddToFridge(scannedItem);
   }
 
   return (
