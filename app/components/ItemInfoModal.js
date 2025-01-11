@@ -14,6 +14,21 @@ import YellowButton from "./YellowButton";
 import { TextInput } from "react-native-gesture-handler";
 import ConstructItem from "../utils/ConstructItem";
 import AddToFridge from "../utils/AddToFridge";
+import DropDownPicker from "react-native-dropdown-picker";
+
+//the quantity values for the drop down picker
+const quantityItems = [
+  { label: "1", value: 1 },
+  { label: "2", value: 2 },
+  { label: "3", value: 3 },
+  { label: "4", value: 4 },
+  { label: "5", value: 5 },
+  { label: "6", value: 6 },
+  { label: "7", value: 7 },
+  { label: "8", value: 8 },
+  { label: "9", value: 9 },
+  { label: "Many", value: "many" },
+];
 
 /**
  * The modal shown after an item is scanned.
@@ -22,7 +37,7 @@ import AddToFridge from "../utils/AddToFridge";
  * @param {*} param0
  * @returns
  */
-const ItemInfoModal = ({ visible, onClose, navigation, scannedItem }) => {
+const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
   if (scannedItem !== null) {
     //set default values for text fields as scanned information
     const [name, setName] = useState(scannedItem.name);
@@ -31,6 +46,9 @@ const ItemInfoModal = ({ visible, onClose, navigation, scannedItem }) => {
     const [allergens, setAllergens] = useState(scannedItem.allergens);
     const [traces, setTraces] = useState(scannedItem.traces);
     const [ingredients, setIngredients] = useState(scannedItem.ingredients);
+
+    const [selectedQuantity, setSelectedQuantity] = useState(1);
+    const [isPickerOpen, setPickerOpen] = useState(false);
 
     return (
       <View style={styles.container}>
@@ -79,13 +97,16 @@ const ItemInfoModal = ({ visible, onClose, navigation, scannedItem }) => {
                     multiline={true}
                   />
                   <Text style={styles.requiredField}>Quantity*: </Text>
-                  <TextInput
-                    style={styles.textInput}
-                    defaultValue={quantity.toString()} //converts quantity to string for display in text input
-                    onChangeText={
-                      (newQuantity) => setQuantity(Number(newQuantity)) //converts text back into a number
-                    }
-                  />
+                  <View>
+                    <DropDownPicker
+                      containerStyle={styles.quantityPicker}
+                      open={isPickerOpen}
+                      setOpen={setPickerOpen}
+                      value={selectedQuantity}
+                      setValue={setSelectedQuantity}
+                      items={quantityItems}
+                    ></DropDownPicker>
+                  </View>
                   <Text style={styles.modalText}>Allergens: </Text>
                   <TextInput
                     style={styles.textInput}
@@ -145,6 +166,7 @@ const ItemInfoModal = ({ visible, onClose, navigation, scannedItem }) => {
       const finalItem = ConstructItem(
         scannedItem.productId,
         scannedItem.name,
+        selectedQuantity,
         scannedItem.size,
         scannedItem.ingredients,
         scannedItem.allergens,
@@ -152,6 +174,8 @@ const ItemInfoModal = ({ visible, onClose, navigation, scannedItem }) => {
         scannedItem.image,
         scannedItem.keywords
       );
+
+      console.log(JSON.parse(finalItem));
 
       AddToFridge(JSON.parse(finalItem));
       return true;
@@ -237,6 +261,10 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginTop: 10,
+  },
+  quantityPicker: {
+    width: 300,
+    margin: 5,
   },
 });
 

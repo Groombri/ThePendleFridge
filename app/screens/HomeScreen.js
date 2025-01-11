@@ -121,7 +121,6 @@ function HomeScreen({ navigation, route }) {
         onClose={() => {
           setItemInfoModalVisible(false);
         }}
-        navigation={navigation}
       />
     </View>
   );

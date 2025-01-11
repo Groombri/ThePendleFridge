@@ -8,55 +8,55 @@ import app from "../config/firebaseConfig";
  * and https://firebase.google.com/docs/database/web/read-and-write#read_data_once
  */
 export default function AddToFridge(foodItem) {
+  //assigns properties to those of foodItem. Deals with if a property is empty (undefined)
+  const id = foodItem["productId"];
+  const productName = handleUndefined(foodItem, "name");
+  const itemSize = handleUndefined(foodItem, "size");
+  const ingredients = handleUndefined(foodItem, "ingredients");
+  const allergens = handleUndefined(foodItem, "allergens");
+  const traces = handleUndefined(foodItem, "traces");
+  const image = handleUndefined(foodItem, "image");
+  const keywords = handleUndefined(foodItem, "keywords");
 
-    //assigns properties to those of foodItem. Deals with if a property is empty (undefined)
-    const id = foodItem["productId"];
-    const productName = handleUndefined(foodItem, "name");
-    const itemSize = handleUndefined(foodItem, "size");
-    const ingredients = handleUndefined(foodItem, "ingredients");
-    const allergens = handleUndefined(foodItem, "allergens");
-    const traces = handleUndefined(foodItem, "traces");
-    const image = handleUndefined(foodItem, "image");
-    const keywords = handleUndefined(foodItem, "keywords");
+  //get reference to database and productId
+  const dbRef = ref(getDatabase(app));
+  const productRef = child(dbRef, "product/" + id);
 
-    //get reference to database and productId
-    const dbRef = ref(getDatabase(app));
-    const productRef = child(dbRef, 'product/' + id);
+  //check if the productId is already in the fridge database
+  get(productRef)
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        //if the product exists, update the quantity
+        const existingProduct = snapshot.val();
+        const newQuantity = existingProduct.quantity + 1;
 
-    //check if the productId is already in the fridge database
-    get(productRef).then((snapshot) => {
-        if(snapshot.exists()) {
-            
-            //if the product exists, update the quantity
-            const existingProduct = snapshot.val();
-            const newQuantity = existingProduct.quantity + 1;
+        set(productRef, {
+          name: productName,
+          quantity: newQuantity,
+          size: itemSize,
+          ingredients,
+          allergens,
+          traces,
+          image,
+          keywords,
+        });
+      } else {
+        //if this product is not in the fridge, add it
 
-            set(productRef, {
-                name: productName,
-                quantity: newQuantity,
-                size: itemSize,
-                ingredients,
-                allergens,
-                traces,
-                image,
-                keywords
-            });
-        }
-        else { //if this product is not in the fridge, add it
-            
-            set(productRef, {
-                name: productName,
-                quantity: 1,
-                size: itemSize,
-                ingredients,
-                allergens,
-                traces,
-                image,
-                keywords
-            });
-        }
-    }).catch((error) => {
-        console.error(error);
+        set(productRef, {
+          name: productName,
+          quantity: foodItem.quantity,
+          size: itemSize,
+          ingredients,
+          allergens,
+          traces,
+          image,
+          keywords,
+        });
+      }
+    })
+    .catch((error) => {
+      console.error(error);
     });
 }
 
@@ -68,8 +68,10 @@ export default function AddToFridge(foodItem) {
  * @returns an empty string if any other property is incomplete
  */
 function handleUndefined(foodItem, property) {
-    if(property === "image") {
-        return foodItem[property] === undefined ? "QUESTION MARK" : foodItem[property];
-    }
-    return foodItem[property] === undefined ? "" : foodItem[property];
+  if (property === "image") {
+    return foodItem[property] === undefined
+      ? "QUESTION MARK"
+      : foodItem[property];
+  }
+  return foodItem[property] === undefined ? "" : foodItem[property];
 }

@@ -40,6 +40,7 @@ export default GetDataFromBarcode = async (barcode) => {
       const foodItem = ConstructItem(
         barcode,
         productName,
+        1,
         itemSize,
         ingredients,
         allergens,

@@ -4,23 +4,22 @@ import { CameraView, Camera } from "expo-camera";
 import { StyleSheet, Text, View } from "react-native";
 import YellowButton from "./YellowButton";
 import GetDataFromBarcode from "../utils/GetDataFromBarcode";
-import AddToFridge from "../utils/AddToFridge";
 
 /**
  * A barcode scanner that scans EAN-13 barcodes using expo-camera.
  * Based on https://github.com/expo/fyi/blob/main/barcode-scanner-to-expo-camera.md
- * @returns The user's back camera with barcode scanning functionality, filling the entire screen. 
+ * @returns The user's back camera with barcode scanning functionality, filling the entire screen.
  * Contains instruction text and button to close the camera.
  */
 const BarcodeScanner = () => {
   const navigation = useNavigation(); //hook allows access to navigation functionality, as isn't passed as prop
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  
+
   /**
    * Thanks to https://stackoverflow.com/questions/77415039/cannot-set-expo-camera-scan-interval
    * {lastScannedTimeRef} is used to save a timestamp of the first scan.
-   * This makes sure that multiple scans can't take place in the time that it takes for {scanned} 
+   * This makes sure that multiple scans can't take place in the time that it takes for {scanned}
    * to change state. See: handleBarcodeScanned() for use.
    */
   const lastScannedTimeRef = useRef(0);
@@ -39,34 +38,36 @@ const BarcodeScanner = () => {
   }
 
   if (hasPermission === false) {
-    return <Text>Failed to open - please grant permission to access camera.</Text>;
+    return (
+      <Text>Failed to open - please grant permission to access camera.</Text>
+    );
   }
 
   const handleBarcodeScanned = ({ type, data }) => {
     //don't handle the scan if 2 secs have not passed since the last
     const time = Date.now();
-    if (scanned || (time - lastScannedTimeRef.current < 2000)) {return}
+    if (scanned || time - lastScannedTimeRef.current < 2000) {
+      return;
+    }
 
     //if scan successful: store the timestamp, setScanned to true, process data, then close scanner
     lastScannedTimeRef.current = time;
 
     setScanned(true);
-    handleScannedData({type, data});
+    handleScannedData({ type, data });
   };
 
   //Processes the scanned data
   const handleScannedData = async ({ type, data }) => {
-    
     setScanned(false); //reset scanned state to allow for multiple scans
-    
+
     //gets the product information as JSON object
-    const scannedItem = await GetDataFromBarcode(data); 
+    const scannedItem = await GetDataFromBarcode(data);
     console.log(scannedItem);
 
     //parses the scannedItem into the home screen so it can display the ItemInfoModal
     navigation.navigate("Home", { scannedItem });
-    //AddToFridge(scannedItem);
-  }
+  };
 
   return (
     <CameraView
@@ -77,10 +78,15 @@ const BarcodeScanner = () => {
       }}
     >
       <View style={styles.textContainer}>
-        <Text style={styles.instructionText}>Point the camera at a barcode</Text>
+        <Text style={styles.instructionText}>
+          Point the camera at a barcode
+        </Text>
       </View>
       <View style={styles.closeButtonContainer}>
-        <YellowButton title="Close" onPress={() => navigation.navigate("Home")} /> 
+        <YellowButton
+          title="Close"
+          onPress={() => navigation.navigate("Home")}
+        />
       </View>
     </CameraView>
   );
@@ -96,20 +102,20 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
-    marginTop: 50
+    marginTop: 50,
   },
   closeButtonContainer: {
     flex: 1,
     justifyContent: "flex-end",
     alignItems: "center",
-    marginBottom: 50
+    marginBottom: 50,
   },
   instructionText: {
     fontFamily: "Poppins",
     fontWeight: "bold",
     fontSize: 20,
-    color: "#FFB900"
-  }
+    color: "#FFB900",
+  },
 });
 
 export default BarcodeScanner;
