@@ -14,6 +14,13 @@ import { TextInput } from "react-native-gesture-handler";
 import ConstructItem from "../utils/ConstructItem";
 import AddToFridge from "../utils/AddToFridge";
 
+/**
+ * The modal shown after an item is scanned.
+ * Allows the user to fill in any missing gaps or correct wrong information
+ * before then donating the item to the fridge
+ * @param {*} param0
+ * @returns
+ */
 const ItemInfoModal = ({ visible, onClose, navigation, scannedItem }) => {
   if (scannedItem !== null) {
     //set default values for text fields as scanned information
@@ -60,6 +67,7 @@ const ItemInfoModal = ({ visible, onClose, navigation, scannedItem }) => {
                     style={styles.textInput}
                     defaultValue={name}
                     onChangeText={(newName) => setName(newName)}
+                    multiline={true}
                   />
                   {/* <Image></Image> */}
                   <Text style={styles.modalText}>Product size: </Text>
@@ -112,6 +120,7 @@ const ItemInfoModal = ({ visible, onClose, navigation, scannedItem }) => {
                   title="Donate item"
                   onPress={() => {
                     validateInfo(scannedItem);
+                    onClose();
                   }}
                 />
               </ScrollView>
@@ -122,15 +131,22 @@ const ItemInfoModal = ({ visible, onClose, navigation, scannedItem }) => {
     );
 
     function validateInfo(scannedItem) {
-      console.log(name);
-
       //for each field, validate
-      //if not valid, alert and highlight field
+      //if not valid, alert and highlight field, return
 
-      //   else {
-      //     const finalItem = ConstructItem(scannedItem["productId"], ...);
-      //     AddToFridge(finalItem);
-      //   }
+      //if fields are valid, reconstruct the item with the field values and add to the fridge
+      const finalItem = ConstructItem(
+        scannedItem.productId,
+        scannedItem.name,
+        scannedItem.size,
+        scannedItem.ingredients,
+        scannedItem.allergens,
+        scannedItem.traces,
+        scannedItem.image,
+        scannedItem.keywords
+      );
+
+      AddToFridge(JSON.parse(finalItem));
     }
   }
 };
