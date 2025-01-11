@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  Alert,
 } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import YellowButton from "./YellowButton";
@@ -119,8 +120,14 @@ const ItemInfoModal = ({ visible, onClose, navigation, scannedItem }) => {
                 <YellowButton
                   title="Donate item"
                   onPress={() => {
-                    validateInfo(scannedItem);
-                    onClose();
+                    //only close the modal if the info is valid
+                    if (validateInfo(scannedItem) === true) {
+                      Alert.alert(
+                        "Item added",
+                        "Thank you for your donation ❤️"
+                      );
+                      onClose();
+                    }
                   }}
                 />
               </ScrollView>
@@ -147,6 +154,7 @@ const ItemInfoModal = ({ visible, onClose, navigation, scannedItem }) => {
       );
 
       AddToFridge(JSON.parse(finalItem));
+      return true;
     }
   }
 };
