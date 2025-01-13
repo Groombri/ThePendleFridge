@@ -38,11 +38,11 @@ const quantityItems = [
  * @returns
  */
 const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
+  //if an item has been scanned
   if (scannedItem !== null) {
     //set default values for text fields as scanned information
     const [name, setName] = useState(scannedItem.name);
     const [size, setSize] = useState(scannedItem.size);
-    const [quantity, setQuantity] = useState(scannedItem.quantity);
     const [allergens, setAllergens] = useState(scannedItem.allergens);
     const [traces, setTraces] = useState(scannedItem.traces);
     const [ingredients, setIngredients] = useState(scannedItem.ingredients);
@@ -111,7 +111,7 @@ const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
                   <TextInput
                     style={styles.textInput}
                     defaultValue={
-                      allergens.length === 0 ? "" : allergens.join(", ") //converts array of allergns to string
+                      allergens.length === 0 ? "" : allergens.slice(3) //removes language tag (en:) from string
                     }
                     onChangeText={(newAllergens) =>
                       setAllergens(

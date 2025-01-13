@@ -28,7 +28,7 @@ export default GetDataFromBarcode = async (barcode) => {
       const itemSize = data.product.quantity;
       const labels = data.product.labels;
       const ingredients = data.product.ingredients_text_en;
-      const allergens = data.product.allergens_tags;
+      const allergens = data.product.allergens;
       const traces = data.product.traces;
       const image =
         data.product.image_url !== null

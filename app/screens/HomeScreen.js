@@ -31,6 +31,7 @@ function HomeScreen({ navigation, route }) {
   useEffect(() => {
     //if a scanned item has been passed into the home screen, store the item and display modal
     if (route.params?.scannedItem) {
+      //optional chaining (?.) returns undefined if obj is undefined or null, instead of error
       setScannedItem(route.params.scannedItem);
       setItemInfoModalVisible(true);
     }
