@@ -28,7 +28,19 @@ export default function AddToFridge(foodItem) {
       if (snapshot.exists()) {
         //if the product exists, update the quantity
         const existingProduct = snapshot.val();
-        const newQuantity = existingProduct.quantity + 1;
+
+        /**
+         * "Many" is used for items that the user can't count e.g. a large box of loose carrots.
+         * if the item being added has a quantity of "many", display "many"
+         * Similarly, if an existing item has a quantity of "many", keep displaying "many"
+         * If quantity < 10 and item being added quantity < 10, sum the total quantity
+         */
+        const newQuantity =
+          String(foodItem.quantity).toLowerCase() === "many"
+            ? "Many"
+            : String(existingProduct.quantity).toLowerCase() === "many"
+            ? "Many"
+            : existingProduct.quantity + foodItem.quantity;
 
         set(productRef, {
           name: productName,
