@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useNavigation } from "@react-navigation/native";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { CameraView, Camera } from "expo-camera";
 import { StyleSheet, Text, View } from "react-native";
 import YellowButton from "./YellowButton";
@@ -23,6 +23,13 @@ const BarcodeScanner = () => {
    * to change state. See: handleBarcodeScanned() for use.
    */
   const lastScannedTimeRef = useRef(0);
+
+  //Each time the barcode scanner is navigated to, reset scanned to false to allow for multiple scans
+  useFocusEffect(
+    useCallback(() => {
+      setScanned(false);
+    }, [])
+  );
 
   // Request camera permission
   useEffect(() => {
@@ -59,8 +66,6 @@ const BarcodeScanner = () => {
 
   //Processes the scanned data
   const handleScannedData = async ({ type, data }) => {
-    setScanned(false); //reset scanned state to allow for multiple scans
-
     //gets the product information as JSON object
     const scannedItem = await GetDataFromBarcode(data);
     console.log(scannedItem);
