@@ -58,7 +58,7 @@ const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
       setTraces(scannedItem.traces);
       setIngredients(scannedItem.ingredients);
     }
-  });
+  }, [scannedItem]);
 
   //if an item has been scanned, render the modal with its info
   if (scannedItem) {
@@ -96,7 +96,7 @@ const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
                   <Text style={styles.requiredField}>Product name*: </Text>
                   <TextInput
                     style={styles.textInput}
-                    defaultValue={name}
+                    value={name}
                     onChangeText={(newName) => setName(newName)}
                     multiline={true}
                   />
@@ -170,19 +170,30 @@ const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
       </View>
     );
 
+    /**
+     * Checks if the entered item information is valid, adds item to fridge if so.
+     * If not, highlights invalid fields in red
+     * @param {*} scannedItem the just-scanned item, whose information is being entered
+     * @returns true if entered details are valid, false if not
+     */
     function validateInfo(scannedItem) {
       //for each field, validate
       //if not valid, alert and highlight field, return
 
+      if (!name) {
+        console.log("Non-existing name!");
+        return false;
+      }
+
       //if fields are valid, reconstruct the item with the field values and add to the fridge
       const finalItem = ConstructItem(
         scannedItem.productId,
-        scannedItem.name,
+        name,
         selectedQuantity,
-        scannedItem.size,
-        scannedItem.ingredients,
-        scannedItem.allergens,
-        scannedItem.traces,
+        size,
+        ingredients,
+        allergens,
+        traces,
         scannedItem.image,
         scannedItem.keywords
       );
