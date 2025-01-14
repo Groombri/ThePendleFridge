@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import {
   Modal,
   View,
@@ -49,6 +49,15 @@ const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
 
     const [selectedQuantity, setSelectedQuantity] = useState(1);
     const [isPickerOpen, setPickerOpen] = useState(false);
+
+    //reset text fields for new scanned item on each render
+    useEffect(() => {
+      setName(scannedItem.name);
+      setSize(scannedItem.size);
+      setAllergens(scannedItem.allergens);
+      setTraces(scannedItem.traces);
+      setIngredients(scannedItem.ingredients);
+    });
 
     return (
       <View style={styles.container}>
