@@ -99,6 +99,7 @@ const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
                     value={name}
                     onChangeText={(newName) => setName(newName)}
                     multiline={true}
+                    maxLength={80}
                   />
                   {/* <Image></Image> */}
                   <Text style={styles.modalText}>Product size: </Text>
@@ -107,6 +108,7 @@ const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
                     defaultValue={size}
                     onChangeText={(newSize) => setSize(newSize)}
                     multiline={true}
+                    maxLength={20}
                   />
                   <Text style={styles.requiredField}>Quantity*: </Text>
                   <View>
@@ -132,6 +134,7 @@ const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
                           .map((allergen) => allergen.trim()) //converts string input text back into array
                       )
                     }
+                    maxLength={50}
                   />
                   <Text style={styles.modalText}>May contain traces of: </Text>
                   <TextInput
@@ -139,6 +142,7 @@ const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
                     defaultValue={traces}
                     onChangeText={(newTraces) => setTraces(newTraces)}
                     multiline={true}
+                    maxLength={40}
                   />
                   <Text style={styles.modalText}>Ingredients: </Text>
                   <TextInput
@@ -148,6 +152,7 @@ const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
                       setIngredients(newIngredients)
                     }
                     multiline={true}
+                    maxLength={300}
                   />
                 </View>
                 <YellowButton
@@ -172,28 +177,30 @@ const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
 
     /**
      * Checks if the entered item information is valid, adds item to fridge if so.
-     * If not, highlights invalid fields in red
      * @param {*} scannedItem the just-scanned item, whose information is being entered
      * @returns true if entered details are valid, false if not
+     * ---------------------------------------------------------------------------------
+     * Validation rules:
+     * For max lengths, see maxLength property of fields
+     * Name must not be empty
+     * Size, ingredients, allergens, traces optional
      */
     function validateInfo(scannedItem) {
-      //for each field, validate
-      //if not valid, alert and highlight field, return
-
-      if (!name) {
-        console.log("Non-existing name!");
+      //reject if there is no product name (null or white space)
+      if (!name || name.trim() === "") {
+        Alert.alert("Failed to add item", "product name required");
         return false;
       }
 
       //if fields are valid, reconstruct the item with the field values and add to the fridge
       const finalItem = ConstructItem(
         scannedItem.productId,
-        name,
+        name.trim(), //.trim() removes whitespace from the start and end
         selectedQuantity,
-        size,
-        ingredients,
-        allergens,
-        traces,
+        size.trim(),
+        ingredients.trim(),
+        allergens.trim(),
+        traces.trim(),
         scannedItem.image,
         scannedItem.keywords
       );

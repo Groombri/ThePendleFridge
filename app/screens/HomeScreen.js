@@ -144,7 +144,13 @@ function renderProducts(fridgeContents) {
               source={{ uri: product.image }}
               style={styles.productImage}
             />
-            <Text style={TextStyles.bodyMain}>{product.name}</Text>
+            <Text
+              style={TextStyles.bodyMain}
+              numberOfLines={2}
+              ellipsizeMode="tail"
+            >
+              {product.name}
+            </Text>
             <Text style={{ fontSize: 20 }}>→</Text>
           </TouchableOpacity>
         </View>
