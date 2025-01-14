@@ -38,27 +38,30 @@ const quantityItems = [
  * @returns
  */
 const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
-  //if an item has been scanned
-  if (scannedItem !== null) {
-    //set default values for text fields as scanned information
-    const [name, setName] = useState(scannedItem.name);
-    const [size, setSize] = useState(scannedItem.size);
-    const [allergens, setAllergens] = useState(scannedItem.allergens);
-    const [traces, setTraces] = useState(scannedItem.traces);
-    const [ingredients, setIngredients] = useState(scannedItem.ingredients);
+  //initialise hooks for scannedItem information
+  const [name, setName] = useState("");
+  const [size, setSize] = useState("");
+  const [allergens, setAllergens] = useState([]);
+  const [traces, setTraces] = useState("");
+  const [ingredients, setIngredients] = useState("");
+  const [selectedQuantity, setSelectedQuantity] = useState(1);
+  const [isPickerOpen, setPickerOpen] = useState(false);
 
-    const [selectedQuantity, setSelectedQuantity] = useState(1);
-    const [isPickerOpen, setPickerOpen] = useState(false);
-
-    //reset text fields for new scanned item on each render
-    useEffect(() => {
+  //on each re-render
+  useEffect(() => {
+    //if an item has been scanned
+    if (scannedItem) {
+      //set values for text fields as new scanned item info
       setName(scannedItem.name);
       setSize(scannedItem.size);
       setAllergens(scannedItem.allergens);
       setTraces(scannedItem.traces);
       setIngredients(scannedItem.ingredients);
-    });
+    }
+  });
 
+  //if an item has been scanned, render the modal with its info
+  if (scannedItem) {
     return (
       <View style={styles.container}>
         <Modal
