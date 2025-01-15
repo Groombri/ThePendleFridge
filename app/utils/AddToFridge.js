@@ -1,5 +1,6 @@
 import { getDatabase, ref, set, get, child } from "firebase/database";
 import app from "../config/firebaseConfig";
+import { Image } from "react-native";
 
 /**
  * Function that takes a foodItem and adds it to the fridge.
@@ -82,8 +83,8 @@ export default function AddToFridge(foodItem) {
 function handleUndefined(foodItem, property) {
   if (property === "image") {
     return foodItem[property] === undefined
-      ? "QUESTION MARK"
-      : foodItem[property];
+      ? Image.resolveAssetSource(require("../assets/images/no-image.png")).uri //uri of empty image in assets folder
+      : foodItem[property]; //uri of foodItem image in OpenFoodFacts
   }
   return foodItem[property] === undefined ? "" : foodItem[property];
 }

@@ -1,8 +1,10 @@
 import React from "react";
-import { Modal, View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Modal, View, Text, TouchableOpacity, Image } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import YellowButton from "./YellowButton";
+import { ConstructEmptyItem } from "../utils/ConstructItem";
+import ModalStyles from "../styles/ModalStyles";
 
 /**
  * The modal that appears after selecting "Donate an item" in the Home Screen's header.
@@ -14,31 +16,31 @@ import YellowButton from "./YellowButton";
  */
 const DonateModal = ({ visible, onClose, navigation }) => {
   return (
-    <View style={styles.container}>
+    <View style={ModalStyles.container}>
       <Modal
         transparent={true}
         animationType="slide"
         visible={visible}
         onRequestClose={onClose}
       >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <View style={styles.row}>
+        <View style={ModalStyles.modalOverlay}>
+          <View style={ModalStyles.modalContent}>
+            <View style={ModalStyles.row}>
               <TouchableOpacity
-                style={styles.closeModalButton}
+                style={ModalStyles.closeModalButton}
                 onPress={onClose}
               >
-                <AntDesign name="closecircle" style={styles.closeIcon} />
+                <AntDesign name="closecircle" style={ModalStyles.closeIcon} />
               </TouchableOpacity>
             </View>
-            <Text style={styles.modalTitleText}>Donate a food item</Text>
-            <Text style={styles.modalText}>
+            <Text style={ModalStyles.modalTitleText}>Donate a food item</Text>
+            <Text style={ModalStyles.modalText}>
               Choose one of the following options to provide us information
               about the food item:{" "}
             </Text>
             <MaterialCommunityIcons
               name="barcode-scan"
-              style={styles.modalIcons}
+              style={ModalStyles.modalIcons}
             />
             <YellowButton
               title="Scan barcode"
@@ -48,68 +50,36 @@ const DonateModal = ({ visible, onClose, navigation }) => {
                 navigation.navigate("BarcodeScanner");
               }}
             />
-            <MaterialCommunityIcons name="camera" style={styles.modalIcons} />
+            <MaterialCommunityIcons
+              name="camera"
+              style={ModalStyles.modalIcons}
+            />
             <YellowButton title="Take a picture" />
-            <AntDesign name="form" style={styles.modalIcons} />
-            <YellowButton title="Enter details" />
+            <AntDesign name="form" style={ModalStyles.modalIcons} />
+            <YellowButton
+              title="Enter details"
+              onPress={() => {
+                /**
+                 * When the "Enter" details btn is pressed, close the modal and pass an
+                 * empty item into the home screen to activate the appropriate ItemInfoModal
+                 */
+                onClose();
+
+                //uri for when product doesnt have an image
+                imageUri = Image.resolveAssetSource(
+                  require("../assets/images/no-image.png")
+                ).uri;
+
+                //constructs an empty item for the user to populate
+                const scannedItem = JSON.parse(ConstructEmptyItem(imageUri));
+                navigation.navigate("Home", { scannedItem });
+              }}
+            />
           </View>
         </View>
       </Modal>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  modalOverlay: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  modalContent: {
-    width: 350,
-    height: 700,
-    padding: 20,
-    backgroundColor: "white",
-    borderRadius: 10,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.5,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  modalTitleText: {
-    fontFamily: "Poppins",
-    fontSize: 30,
-    fontWeight: "bold",
-    textAlign: "center",
-    paddingTop: 15,
-    paddingBottom: 5,
-    color: "green",
-  },
-  modalText: {
-    fontFamily: "Poppins",
-    fontSize: 15,
-    fontWeight: "500",
-    color: "black",
-    textAlign: "center",
-  },
-  modalIcons: {
-    color: "black",
-    fontSize: 100,
-    paddingTop: 20,
-    paddingBottom: 5,
-  },
-  closeIcon: {
-    fontSize: 25,
-    color: "darkred",
-  },
-  row: {
-    position: "absolute",
-    top: 10,
-    left: 10,
-  },
-});
 
 export default DonateModal;

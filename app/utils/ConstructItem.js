@@ -1,3 +1,5 @@
+import uuid from "react-native-uuid";
+
 /**
  * Constructs a JSON object representing a food item and its properties
  */
@@ -27,3 +29,24 @@ export default ConstructItem = (
 
   return JSON.stringify(item);
 };
+
+/**
+ * Constructs an empty food item, which is used when a user enters their own item
+ * @param {*} imageUri the uri to the "no-image.png" icon
+ * @returns item as a JSON string
+ */
+export function ConstructEmptyItem(imageUri) {
+  const item = {
+    productId: uuid.v4(),
+    name: "EMPTY_ITEM",
+    quantity: "",
+    size: "",
+    ingredients: "",
+    allergens: "",
+    traces: "",
+    image: imageUri, //default image for when a specific product image isn't found
+    keywords: "",
+  };
+
+  return JSON.stringify(item);
+}
