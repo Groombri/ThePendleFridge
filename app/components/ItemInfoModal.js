@@ -219,8 +219,6 @@ const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
         scannedItem.keywords
       );
 
-      console.log(JSON.parse(finalItem));
-
       AddToFridge(JSON.parse(finalItem));
       return true;
     }
