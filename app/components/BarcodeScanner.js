@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { CameraView, Camera } from "expo-camera";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Alert } from "react-native";
 import YellowButton from "./YellowButton";
 import GetDataFromBarcode from "../utils/GetDataFromBarcode";
 
@@ -45,8 +45,9 @@ const BarcodeScanner = () => {
   }
 
   if (hasPermission === false) {
-    return (
-      <Text>Failed to open - please grant permission to access camera.</Text>
+    Alert.alert(
+      "Permission denied",
+      "Please grant permission to access camera."
     );
   }
 

@@ -5,7 +5,6 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   ScrollView,
   Alert,
 } from "react-native";
@@ -16,6 +15,7 @@ import ConstructItem from "../utils/ConstructItem";
 import AddToFridge from "../utils/AddToFridge";
 import DropDownPicker from "react-native-dropdown-picker";
 import ModalStyles from "../styles/ModalStyles";
+import PictureUploader from "./PictureUploader";
 
 /**
  * The modal shown after an item is scanned or if the user decides to enter details manually.
@@ -33,6 +33,9 @@ const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
   const [traces, setTraces] = useState("");
   const [ingredients, setIngredients] = useState("");
   const [selectedQuantity, setSelectedQuantity] = useState(1);
+  const [imageUri, setImageUri] = useState("");
+
+  //set quantity dropdown select to closed as default
   const [isPickerOpen, setPickerOpen] = useState(false);
 
   //initialise hooks for appropriate modal type
@@ -53,6 +56,7 @@ const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
         setAllergens("");
         setTraces("");
         setIngredients("");
+        setImageUri("");
 
         //set appropriate modal type
         setTitle("Enter product details");
@@ -77,6 +81,7 @@ const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
                 )
                 .join(",") || ""
         );
+        setImageUri(scannedItem.image || "");
       }
 
       setSelectedQuantity(1); //always set the default quantity as 1
@@ -109,9 +114,9 @@ const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
               >
                 <Text style={ModalStyles.modalTitleText}>{title}</Text>
                 <Text style={ModalStyles.modalText}>{subTitle} </Text>
-                <Image
-                  source={{ uri: scannedItem.image }}
-                  style={styles.productImage}
+                <PictureUploader
+                  imageUri={imageUri}
+                  setImageUri={setImageUri}
                 />
                 <View style={styles.fieldContainer}>
                   <Text style={styles.requiredField}>Product name*: </Text>
@@ -215,7 +220,7 @@ const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
         ingredients.trim(),
         allergens,
         traces.trim(),
-        scannedItem.image,
+        imageUri,
         scannedItem.keywords
       );
 
@@ -262,11 +267,6 @@ const styles = StyleSheet.create({
   scrollView: {
     justifyContent: "center",
     alignItems: "center",
-  },
-  productImage: {
-    width: 50,
-    height: 50,
-    marginTop: 10,
   },
   quantityPicker: {
     width: 300,

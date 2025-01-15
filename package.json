@@ -28,7 +28,8 @@
     "react-native-screens": "~4.4.0",
     "react-native-simple-picker": "^3.1.4",
     "react-native-uuid": "^2.0.3",
-    "expo-screen-orientation": "~8.0.4"
+    "expo-screen-orientation": "~8.0.4",
+    "expo-image-picker": "~16.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
