@@ -3,8 +3,16 @@ import { View, Image, TouchableOpacity, Alert, StyleSheet } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
+/**
+ * Allows the user to upload their own photo of the product.
+ * If no photo exists, use default image ("no-image.png"),
+ * If a photo exists from OpenFoodFacts, use this.
+ * When a user clicks on the image, upload their own using expo-image-picker
+ * @returns JSX touchable product image
+ */
 const PictureUploader = ({ imageUri, setImageUri }) => {
   const handleTakePicture = async () => {
+    //request camera permissions
     const permission = await ImagePicker.requestCameraPermissionsAsync();
     if (!permission.granted) {
       Alert.alert(
@@ -19,11 +27,13 @@ const PictureUploader = ({ imageUri, setImageUri }) => {
       quality: 1,
     });
 
+    //if the user doesnt cancel the upload at any point, set the new image to the uploaded image
     if (!result.canceled) {
       setImageUri(result.assets[0].uri);
     }
   };
 
+  //return the PictureUploader component for use in the ItemInfoModal
   return (
     <TouchableOpacity
       onPress={() =>
@@ -43,7 +53,7 @@ const PictureUploader = ({ imageUri, setImageUri }) => {
           style={styles.productImage}
         />
         <View style={styles.uploadIcon}>
-          <AntDesign name="cloudupload" size={15} color="black" />
+          <AntDesign name="cloudupload" size={30} color="rgb(21, 102, 207)" />
         </View>
       </View>
     </TouchableOpacity>
@@ -64,10 +74,8 @@ const styles = StyleSheet.create({
   },
   uploadIcon: {
     position: "absolute",
-    bottom: -10,
-    right: -25,
-    backgroundColor: "rgba(24, 119, 242, 0.5)", // Semi-transparent background
-    borderRadius: 12,
+    bottom: -15,
+    right: -20,
     padding: 5,
   },
 });
