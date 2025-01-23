@@ -13,6 +13,9 @@ import TextStyles from "../styles/TextStyles";
 import ReadFridge from "../utils/ReadFridge";
 import ItemInfoModal from "../components/ItemInfoModal";
 import { RefreshControl } from "react-native-gesture-handler";
+import Accordion from "../components/Accordion";
+import YellowButton from "../components/YellowButton";
+import Animated, { FadeInDown, FadeOut } from "react-native-reanimated";
 
 /**
  * The application's home screen. This includes the apps custom header + donate an item button.
@@ -102,7 +105,7 @@ function HomeScreen({ navigation, route }) {
         route="Home"
         navigation={navigation}
       />
-      <View style={styles.body}>
+      <Animated.View entering={FadeInDown.duration(1000)} style={styles.body}>
         <ScrollView
           contentContainerStyle={styles.scrollView}
           refreshControl={
@@ -115,7 +118,7 @@ function HomeScreen({ navigation, route }) {
             ? fridgeEmptyContent
             : fridgeNotEmptyContent}
         </ScrollView>
-      </View>
+      </Animated.View>
       <ItemInfoModal
         visible={isItemInfoModalVisible}
         scannedItem={scannedItem}
@@ -138,22 +141,33 @@ function renderProducts(fridgeContents) {
         <Text style={TextStyles.bodyTitle}>What's in?</Text>
       </View>
       {Object.entries(fridgeContents).map(([id, product]) => (
-        <View style={styles.productWrapper} key={id}>
-          <TouchableOpacity activeOpacity={0.7} style={styles.productInfo}>
-            <Image
-              source={{ uri: product.image }}
-              style={styles.productImage}
-            />
-            <Text
-              style={TextStyles.bodyMain}
-              numberOfLines={2}
-              ellipsizeMode="tail"
-            >
-              {product.name}
-            </Text>
-            <Text style={{ fontSize: 20 }}>→</Text>
-          </TouchableOpacity>
-        </View>
+        <Accordion key={id} image={product.image} title={product.name}>
+          <Text style={TextStyles.small}>
+            Name: <Text style={TextStyles.smallBold}>{product.name}</Text>
+          </Text>
+          <Text style={TextStyles.small}>
+            Quantity:{" "}
+            <Text style={TextStyles.smallBold}>{product.quantity}</Text>
+          </Text>
+          <Text style={TextStyles.small}>
+            Ingredients:{" "}
+            <Text style={TextStyles.smallBold}>{product.ingredients}</Text>
+          </Text>
+          <Text style={TextStyles.small}>
+            Allergens:{" "}
+            <Text style={TextStyles.smallBold}>{product.allergens}</Text>
+          </Text>
+          <Text style={TextStyles.small}>
+            Traces: <Text style={TextStyles.smallBold}>{product.traces}</Text>
+          </Text>
+          <Text style={TextStyles.small}>
+            Date donated: <Text style={TextStyles.smallBold}>?</Text>
+          </Text>
+          <YellowButton
+            title="Take item"
+            onPress={() => console.log("TAKEN")}
+          />
+        </Accordion>
       ))}
     </>
   );
@@ -182,30 +196,6 @@ const styles = StyleSheet.create({
     height: 300,
     marginTop: 20,
     marginBottom: 20,
-  },
-  productWrapper: {
-    width: "90%",
-    marginTop: 15,
-    borderWidth: 1.5,
-    borderColor: "rgba(0, 0, 0, 0.2)",
-    borderRadius: 5,
-    shadowColor: "black",
-    shadowOffset: { width: 3, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
-    elevation: 5,
-    backgroundColor: "white",
-  },
-  productInfo: {
-    padding: 10,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  productImage: {
-    width: 50,
-    height: 50,
-    marginRight: 10,
-    borderRadius: 10,
   },
   inventoryHeader: {
     width: "90%",

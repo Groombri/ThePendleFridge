@@ -1,10 +1,18 @@
-import React from "react";
-import { Modal, View, Text, TouchableOpacity, Image } from "react-native";
+import { React, useState } from "react";
+import {
+  Modal,
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  Alert,
+} from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import YellowButton from "./YellowButton";
 import { ConstructEmptyItem } from "../utils/ConstructItem";
 import ModalStyles from "../styles/ModalStyles";
+import * as ImagePicker from "expo-image-picker";
 
 /**
  * The modal that appears after selecting "Donate an item" in the Home Screen's header.
@@ -15,6 +23,87 @@ import ModalStyles from "../styles/ModalStyles";
  * @returns the donation options modal
  */
 const DonateModal = ({ visible, onClose, navigation }) => {
+  const [imageUri, setImageUri] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [labels, setLabels] = useState([]);
+
+  // Function to open camera and get image URI
+  const handleTakePicture = async () => {
+    const permission = await ImagePicker.requestCameraPermissionsAsync();
+    if (!permission.granted) {
+      Alert.alert(
+        "Permission denied",
+        "Please grant permission to access camera."
+      );
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImageUri(result.assets[0].uri); // Set the image URI after taking the picture
+      handleImageRecognition(result.assets[0].uri);
+    }
+  };
+
+  const handleImageRecognition = async (uri) => {
+    if (!uri) {
+      Alert.alert("No image", "Please upload an image first.");
+      return;
+    }
+
+    setLoading(true);
+    const api =
+      "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyCuuhKXGxS3GAKw8j4bX2aOjRtVJvxGkMA";
+
+    try {
+      const imageData = await fetch(uri);
+      const imageBlob = await imageData.blob();
+      const base64Image = await blobToBase64(imageBlob);
+
+      const requestPayload = {
+        requests: [
+          {
+            image: { content: base64Image },
+            features: [{ type: "LABEL_DETECTION", maxResults: 10 }],
+          },
+        ],
+      };
+
+      const response = await fetch(api, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestPayload),
+      });
+      const data = await response.json();
+
+      if (data.responses && data.responses[0].labelAnnotations) {
+        const labelsData = data.responses[0].labelAnnotations;
+        labelsData.map((label) => console.log(label.description));
+        setLabels(labelsData.map((label) => label.description));
+      } else {
+        Alert.alert("No Labels", "No labels found in the image.");
+      }
+    } catch (error) {
+      console.error("Error calling Cloud Vision API:", error);
+      Alert.alert("Error", "Something went wrong with the image recognition.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const blobToBase64 = async (blob) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result.split(",")[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  };
+
   return (
     <View style={ModalStyles.container}>
       <Modal
@@ -54,7 +143,10 @@ const DonateModal = ({ visible, onClose, navigation }) => {
               name="camera"
               style={ModalStyles.modalIcons}
             />
-            <YellowButton title="Take a picture" />
+            <YellowButton
+              title="Image recognition"
+              onPress={handleTakePicture}
+            />
             <AntDesign name="form" style={ModalStyles.modalIcons} />
             <YellowButton
               title="Enter details"
@@ -66,12 +158,12 @@ const DonateModal = ({ visible, onClose, navigation }) => {
                 onClose();
 
                 //uri for when product doesnt have an image
-                imageUri = Image.resolveAssetSource(
+                const image = Image.resolveAssetSource(
                   require("../assets/images/no-image.png")
                 ).uri;
 
                 //constructs an empty item for the user to populate
-                const scannedItem = JSON.parse(ConstructEmptyItem(imageUri));
+                const scannedItem = JSON.parse(ConstructEmptyItem(image));
                 navigation.navigate("Home", { scannedItem });
               }}
             />
