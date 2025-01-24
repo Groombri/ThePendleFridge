@@ -161,7 +161,8 @@ function renderProducts(fridgeContents) {
             Traces: <Text style={TextStyles.smallBold}>{product.traces}</Text>
           </Text>
           <Text style={TextStyles.small}>
-            Date donated: <Text style={TextStyles.smallBold}>?</Text>
+            Date donated:{" "}
+            <Text style={TextStyles.smallBold}>{product.date}</Text>
           </Text>
           <YellowButton
             title="Take item"

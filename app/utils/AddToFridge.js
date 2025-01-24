@@ -18,6 +18,7 @@ export default function AddToFridge(foodItem) {
   const traces = handleUndefined(foodItem, "traces");
   const image = handleUndefined(foodItem, "image");
   const keywords = handleUndefined(foodItem, "keywords");
+  const date = handleUndefined(foodItem, "date");
 
   //get reference to database and productId
   const dbRef = ref(getDatabase(app));
@@ -52,6 +53,7 @@ export default function AddToFridge(foodItem) {
           traces,
           image,
           keywords,
+          date: foodItem.date,
         });
       } else {
         //if this product is not in the fridge, add it
@@ -65,6 +67,7 @@ export default function AddToFridge(foodItem) {
           traces,
           image,
           keywords,
+          date,
         });
       }
     })

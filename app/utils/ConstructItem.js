@@ -25,6 +25,7 @@ export default ConstructItem = (
     traces,
     image,
     keywords,
+    date: getUKDateTime(),
   };
 
   return JSON.stringify(item);
@@ -46,7 +47,24 @@ export function ConstructEmptyItem(imageUri) {
     traces: "",
     image: imageUri, //default image for when a specific product image isn't found
     keywords: "",
+    date: getUKDateTime(),
   };
 
   return JSON.stringify(item);
+}
+
+//returns the current UK date and time
+function getUKDateTime() {
+  const date = new Date();
+  return date
+    .toLocaleString("en-GB", {
+      timeZone: "Europe/London",
+      hour: "2-digit",
+      minute: "2-digit",
+      day: "2-digit",
+      month: "2-digit",
+      year: "2-digit",
+      hourCycle: "h23",
+    })
+    .replace(", ", " at ");
 }
