@@ -16,6 +16,7 @@ import { RefreshControl } from "react-native-gesture-handler";
 import Accordion from "../components/Accordion";
 import YellowButton from "../components/YellowButton";
 import Animated, { FadeInDown, FadeOut } from "react-native-reanimated";
+import { QuantityPicker } from "../components/QuantityPicker";
 
 /**
  * The application's home screen. This includes the apps custom header + donate an item button.
@@ -26,6 +27,8 @@ import Animated, { FadeInDown, FadeOut } from "react-native-reanimated";
 function HomeScreen({ navigation, route }) {
   const [scannedItem, setScannedItem] = useState(null); //stores an item that has been scanned
   const [isItemInfoModalVisible, setItemInfoModalVisible] = useState(false); //the modal that displays the info of the scannedItem
+  const [isQuantityPickerVisible, setQuantityPickerVisible] = useState(false); //quantity selector for when user takes an item
+  const [productToTake, setProductToTake] = useState(null); //the product that the user has selected to take
   const [refreshing, setRefreshing] = useState(false);
   const [fridgeContents, setFridgeContents] = useState(null); //fridge contents are set to null by default
   const [loadingContents, setLoadingContents] = useState(true); //loads fridge contents from start
@@ -95,7 +98,11 @@ function HomeScreen({ navigation, route }) {
 
   //if fridge contents have been loaded, render the products
   if (!loadingContents) {
-    fridgeNotEmptyContent = renderProducts(fridgeContents);
+    fridgeNotEmptyContent = renderProducts(
+      fridgeContents,
+      setProductToTake,
+      setQuantityPickerVisible
+    );
   }
 
   return (
@@ -126,6 +133,12 @@ function HomeScreen({ navigation, route }) {
           setItemInfoModalVisible(false);
         }}
       />
+      {isQuantityPickerVisible && productToTake && (
+        <QuantityPicker
+          product={productToTake}
+          onClose={() => setQuantityPickerVisible(false)} // Close the picker
+        />
+      )}
     </View>
   );
 }
@@ -134,7 +147,11 @@ function HomeScreen({ navigation, route }) {
  * Takes the entire contents of the fridge and displays each individual item
  * @param {*} fridgeContents the entire contents of the fridge as a JSON string
  */
-function renderProducts(fridgeContents) {
+function renderProducts(
+  fridgeContents,
+  setProductToTake,
+  setQuantityPickerVisible
+) {
   return (
     <>
       <View style={styles.inventoryHeader}>
@@ -167,7 +184,10 @@ function renderProducts(fridgeContents) {
           </Text>
           <YellowButton
             title="Take item"
-            onPress={() => console.log("TAKEN")}
+            onPress={() => {
+              setProductToTake(product);
+              setQuantityPickerVisible(true);
+            }}
           />
         </Accordion>
       ))}
