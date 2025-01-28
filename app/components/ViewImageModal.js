@@ -1,32 +1,32 @@
 import React from "react";
-import { View, StyleSheet, Modal, Image } from "react-native";
+import { StyleSheet, Modal, Image, Pressable } from "react-native";
 
 export const ViewImageModal = ({ visible, onClose, image }) => {
   return (
-    <View style={styles.container}>
-      <Modal
-        transparent={true}
-        animationType="slide"
-        visible={visible}
-        onRequestClose={onClose}
-      >
+    <Modal
+      transparent={true}
+      animationType="slide"
+      visible={visible}
+      onRequestClose={onClose}
+    >
+      <Pressable style={styles.overlay} onPress={onClose}>
         <Image
           source={
             image ? { uri: image } : require("../assets/images/no-image.png") // Fallback image
           }
           style={styles.image}
         />
-      </Modal>
-    </View>
+      </Pressable>
+    </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  overlay: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    backgroundColor: "rgba(0, 0, 0, 0.0)",
   },
   image: {
     width: 300,
