@@ -140,6 +140,7 @@ function renderProducts(fridgeContents) {
       <View style={styles.inventoryHeader}>
         <Text style={TextStyles.bodyTitle}>What's in?</Text>
       </View>
+      {/* for every item in the fridge, display accordion with its details */}
       {Object.entries(fridgeContents).map(([id, product]) => (
         <Accordion key={id} image={product.image} title={product.name}>
           <Text style={TextStyles.small}>

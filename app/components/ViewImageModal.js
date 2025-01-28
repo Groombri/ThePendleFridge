@@ -2,6 +2,9 @@ import React from "react";
 import { StyleSheet, Modal, Image, Pressable } from "react-native";
 import { SnapbackZoom } from "react-native-zoom-toolkit";
 
+/**
+ * Allows user to view a product image in a larger, zoomable modal
+ */
 export const ViewImageModal = ({ visible, onClose, image }) => {
   return (
     <Modal
@@ -14,7 +17,7 @@ export const ViewImageModal = ({ visible, onClose, image }) => {
         <SnapbackZoom>
           <Image
             source={
-              image ? { uri: image } : require("../assets/images/no-image.png") // Fallback image
+              image ? { uri: image } : require("../assets/images/no-image.png") //fallback image
             }
             style={styles.image}
           />

@@ -17,6 +17,7 @@ function Accordion({ image, title, children }) {
     setExpanded(!expanded);
   }
 
+  //styles had to be within function due to use of [expanded] in the terminal operators
   const styles = StyleSheet.create({
     productWrapper: {
       width: "90%",
@@ -71,7 +72,7 @@ function Accordion({ image, title, children }) {
         >
           <Image
             source={
-              image ? { uri: image } : require("../assets/images/no-image.png") // Fallback image
+              image ? { uri: image } : require("../assets/images/no-image.png") //fallback image
             }
             style={styles.productImage}
           />
