@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Modal, Image, Pressable } from "react-native";
+import { SnapbackZoom } from "react-native-zoom-toolkit";
 
 export const ViewImageModal = ({ visible, onClose, image }) => {
   return (
@@ -10,12 +11,14 @@ export const ViewImageModal = ({ visible, onClose, image }) => {
       onRequestClose={onClose}
     >
       <Pressable style={styles.overlay} onPress={onClose}>
-        <Image
-          source={
-            image ? { uri: image } : require("../assets/images/no-image.png") // Fallback image
-          }
-          style={styles.image}
-        />
+        <SnapbackZoom>
+          <Image
+            source={
+              image ? { uri: image } : require("../assets/images/no-image.png") // Fallback image
+            }
+            style={styles.image}
+          />
+        </SnapbackZoom>
       </Pressable>
     </Modal>
   );
