@@ -29,6 +29,7 @@ function HomeScreen({ navigation, route }) {
   const [isItemInfoModalVisible, setItemInfoModalVisible] = useState(false); //the modal that displays the info of the scannedItem
   const [isQuantityPickerVisible, setQuantityPickerVisible] = useState(false); //quantity selector for when user takes an item
   const [productToTake, setProductToTake] = useState(null); //the product that the user has selected to take
+  const [productToTakeID, setProductToTakeID] = useState(null); //the ID of this product
   const [refreshing, setRefreshing] = useState(false);
   const [fridgeContents, setFridgeContents] = useState(null); //fridge contents are set to null by default
   const [loadingContents, setLoadingContents] = useState(true); //loads fridge contents from start
@@ -101,6 +102,7 @@ function HomeScreen({ navigation, route }) {
     fridgeNotEmptyContent = renderProducts(
       fridgeContents,
       setProductToTake,
+      setProductToTakeID,
       setQuantityPickerVisible
     );
   }
@@ -133,9 +135,10 @@ function HomeScreen({ navigation, route }) {
           setItemInfoModalVisible(false);
         }}
       />
-      {isQuantityPickerVisible && productToTake && (
+      {isQuantityPickerVisible && productToTake && productToTakeID && (
         <QuantityPicker
           product={productToTake}
+          id={productToTakeID}
           onClose={() => setQuantityPickerVisible(false)} // Close the picker
         />
       )}
@@ -150,6 +153,7 @@ function HomeScreen({ navigation, route }) {
 function renderProducts(
   fridgeContents,
   setProductToTake,
+  setProductToTakeID,
   setQuantityPickerVisible
 ) {
   return (
@@ -162,6 +166,9 @@ function renderProducts(
         <Accordion key={id} image={product.image} title={product.name}>
           <Text style={TextStyles.small}>
             Name: <Text style={TextStyles.smallBold}>{product.name}</Text>
+          </Text>
+          <Text style={TextStyles.small}>
+            Item size: <Text style={TextStyles.smallBold}>{product.size}</Text>
           </Text>
           <Text style={TextStyles.small}>
             Quantity:{" "}
@@ -186,6 +193,7 @@ function renderProducts(
             title="Take item"
             onPress={() => {
               setProductToTake(product);
+              setProductToTakeID(id);
               setQuantityPickerVisible(true);
             }}
           />

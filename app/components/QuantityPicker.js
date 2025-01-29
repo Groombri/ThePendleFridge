@@ -7,21 +7,38 @@ import {
   Modal,
   TouchableOpacity,
   Image,
+  Alert,
 } from "react-native";
 import YellowButton from "./YellowButton";
 import ModalStyles from "../styles/ModalStyles";
 import TextStyles from "../styles/TextStyles";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import UpdateFridge from "../utils/UpdateFridge";
 
-export const QuantityPicker = ({ product, onClose }) => {
+/**
+ * Lets the user pick the quantity of an item that they'd like to take from the fridge.
+ * In the form of a modal, displays item information at top, the available quantities in the middle,
+ * and a button to confirm that they'd like to take this quantity at the bottom.
+ * See handleButtonPress() to see how the confirm button works.
+ * @param {product} product the selected product
+ * @param {id} id the id of the selected product
+ * @param {onClose} onClose handles closing the QuantityPicker
+ * @returns the JSX of this component
+ */
+export const QuantityPicker = ({ product, id, onClose }) => {
+  //select the first item on the ScrollPicker by default
   const [selectedIndex, setSelectedIndex] = useState(0);
 
+  //initialise quantity options (available quantities the user can take for the product)
   const quantity = product.quantity;
   let quantityOptions = [];
 
+  //populate quantity options with the correct available quantities
   if (quantity === "many") {
     quantityOptions = ["Take some", "Take all remaining"];
   } else {
+    //if product quantity is measurable, available quantities are 1 to quantity
+    //e.g. Peanut Butter quantity = 4, so available quantities = [1,2,3,4]
     quantityOptions = Array.from({ length: quantity }, (_, i) => i + 1);
   }
 
@@ -81,7 +98,14 @@ export const QuantityPicker = ({ product, onClose }) => {
             </View>
             <YellowButton
               title="Confirm"
-              onPress={() => console.log(quantityOptions[selectedIndex])}
+              onPress={() =>
+                handleButtonPress(
+                  product,
+                  id,
+                  quantityOptions[selectedIndex],
+                  onClose
+                )
+              }
             />
           </View>
         </View>
@@ -89,6 +113,35 @@ export const QuantityPicker = ({ product, onClose }) => {
     </View>
   );
 };
+
+/**
+ * Handles when the user presses the confirm button.
+ * The user will be asked to confirm that they wish to continue,
+ * if so, the selected quantity of selected product will be taken from the fridge.
+ * @param {*} product
+ * @param {*} quantity
+ */
+function handleButtonPress(product, id, quantity, onClose) {
+  confirmString =
+    quantity === 1
+      ? `Do you wish to take the ${product.name}?`
+      : quantity > 1
+      ? `Do you wish to take ${quantity} ${product.name}?`
+      : `Do you wish to ${String(quantity).toLowerCase()} ${product.name}?`;
+
+  Alert.alert("Please Confirm", confirmString, [
+    {
+      text: "Back",
+    },
+    {
+      text: "Continue",
+      onPress: () => {
+        UpdateFridge(id, quantity);
+        onClose();
+      },
+    },
+  ]);
+}
 
 const styles = StyleSheet.create({
   productWrapper: {

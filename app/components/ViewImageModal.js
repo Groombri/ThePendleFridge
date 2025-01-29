@@ -9,7 +9,7 @@ export const ViewImageModal = ({ visible, onClose, image }) => {
   return (
     <Modal
       transparent={true}
-      animationType="slide"
+      animationType="fade"
       visible={visible}
       onRequestClose={onClose}
     >
