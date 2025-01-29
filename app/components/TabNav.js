@@ -8,6 +8,9 @@ import TextStyles from "../styles/TextStyles";
 
 const Tab = createMaterialTopTabNavigator();
 
+/**
+ * A tab navigator for navigating between the NotificationsScreen and the SettingsScreen.
+ */
 export default function TabNav() {
   return (
     <View style={DefaultPageStyle.container}>
