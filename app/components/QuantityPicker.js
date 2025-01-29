@@ -14,11 +14,7 @@ import TextStyles from "../styles/TextStyles";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
 export const QuantityPicker = ({ product, onClose }) => {
-  const [selectedQuantity, setSelectedQuantity] = useState(1);
-
-  //   const handleQuantitySelected = (value) => {
-  //     setSelectedQuantity(value);
-  //   };
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const quantity = product.quantity;
   let quantityOptions = [];
@@ -28,6 +24,9 @@ export const QuantityPicker = ({ product, onClose }) => {
   } else {
     quantityOptions = Array.from({ length: quantity }, (_, i) => i + 1);
   }
+
+  //for some reason wouldn't allow me to scroll to all items, so padding items added to end
+  quantityOptions = [...quantityOptions, "", "", ""];
 
   return (
     <View style={ModalStyles.container}>
@@ -66,8 +65,9 @@ export const QuantityPicker = ({ product, onClose }) => {
             <View style={styles.scrollPickerContainer}>
               <ScrollPicker
                 dataSource={quantityOptions}
-                onValueChange={() => {
-                  //
+                selectedIndex={0}
+                onValueChange={(data, index) => {
+                  setSelectedIndex(index);
                 }}
                 wrapperHeight={70}
                 itemHeight={50}
@@ -79,7 +79,10 @@ export const QuantityPicker = ({ product, onClose }) => {
                 itemTextStyle={{ fontFamily: "Poppins", fontSize: 20 }}
               />
             </View>
-            <YellowButton title="Confirm" />
+            <YellowButton
+              title="Confirm"
+              onPress={() => console.log(quantityOptions[selectedIndex])}
+            />
           </View>
         </View>
       </Modal>
@@ -102,6 +105,7 @@ const styles = StyleSheet.create({
     height: "40%",
     width: "100%",
     margin: 10,
+    marginBottom: 20,
     borderWidth: 1,
     borderRadius: 10,
     borderColor: "rgba(0, 0, 0, 0.1)",
