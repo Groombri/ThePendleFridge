@@ -1,7 +1,7 @@
-import { Text, View } from 'react-native';
-import CustomHeader from '../components/CustomHeader';
-import DefaultPageStyle from '../styles/DefaultPageStyle';
-import TextStyles from '../styles/TextStyles';
+import { Text, View } from "react-native";
+import CustomHeader from "../components/CustomHeader";
+import DefaultPageStyle from "../styles/DefaultPageStyle";
+import TextStyles from "../styles/TextStyles";
 
 export default function AboutScreen() {
   return (
@@ -14,4 +14,3 @@ export default function AboutScreen() {
     </View>
   );
 }
-
