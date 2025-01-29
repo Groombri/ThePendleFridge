@@ -47,7 +47,7 @@ export const QuantityPicker = ({ product, id, onClose }) => {
 
   return (
     <View style={ModalStyles.container}>
-      <Modal transparent={true} animationType="slide" onRequestClose={onClose}>
+      <Modal transparent={true} animationType="fade" onRequestClose={onClose}>
         <View style={ModalStyles.modalOverlay}>
           <View style={[ModalStyles.modalContent, { height: 550 }]}>
             <View style={ModalStyles.row}>
@@ -122,14 +122,14 @@ export const QuantityPicker = ({ product, id, onClose }) => {
  * @param {*} quantity
  */
 function handleButtonPress(product, id, quantity, onClose) {
-  confirmString =
+  const confirmString =
     quantity === 1
       ? `Do you wish to take the ${product.name}?`
       : quantity > 1
       ? `Do you wish to take ${quantity} ${product.name}?`
       : `Do you wish to ${String(quantity).toLowerCase()} ${product.name}?`;
 
-  Alert.alert("Please Confirm", confirmString, [
+  Alert.alert("Please confirm", confirmString, [
     {
       text: "Back",
     },
