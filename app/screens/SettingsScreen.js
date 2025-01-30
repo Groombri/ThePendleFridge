@@ -4,6 +4,7 @@ import DefaultPageStyle from "../styles/DefaultPageStyle";
 import TextStyles from "../styles/TextStyles";
 import { ScrollView } from "react-native-gesture-handler";
 import { FoodsList } from "../components/FoodsList";
+import TimePicker from "../components/TimePicker";
 
 export default function SettingsScreen() {
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
@@ -20,32 +21,30 @@ export default function SettingsScreen() {
         contentContainerStyle={styles.scrollView}
         automaticallyAdjustKeyboardInsets={true}
       >
-        <Text style={TextStyles.bodyMain}>
-          {/* Here you can configure whether to receive notifications on when new
-          items have been added to the fridge. */}
-        </Text>
         <Setting
-          text="Enable push notifications"
+          text="Enabled"
           value={notificationsEnabled}
           onValueChange={setNotificationsEnabled}
         />
+        <Text style={styles.titleText}>Notify me...</Text>
         <Setting
-          text="Notify me even if a product matches my allergens"
+          text="Even if a product matches my allergens"
           value={allergenNotificationsEnabled}
           onValueChange={setAllergenNotificationsEnabled}
         />
         <Setting
-          text="Only notify me when on campus"
+          text="Only when on campus"
           value={campusNotificationsEnabled}
           onValueChange={setCampusNotificationsEnabled}
         />
         <Setting
-          text="Notify me..."
+          text="Only between certain hours"
           value={notificationTimes}
           onValueChange={setNotificationTimes}
         />
+        {notificationTimes && <TimePicker />}
         <Setting
-          text="Only notify me for certain items"
+          text="Only for certain items"
           value={notifyFoods}
           onValueChange={setNotifyFoods}
         />
@@ -74,6 +73,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 25,
     borderTopWidth: 0.5,
+    borderBottomWidth: 0.5,
     borderColor: "lightgray",
+  },
+  titleText: {
+    padding: 25,
+    paddingBottom: 0,
+    fontFamily: "Poppins",
+    fontSize: 30,
+    fontWeight: "bold",
+    paddingTop: 15,
+    paddingBottom: 5,
+    color: "green",
   },
 });
