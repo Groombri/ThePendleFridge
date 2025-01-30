@@ -24,54 +24,45 @@ export default function SettingsScreen() {
           {/* Here you can configure whether to receive notifications on when new
           items have been added to the fridge. */}
         </Text>
-        <View style={styles.settingContainer}>
-          <Text style={TextStyles.bodyMain}>Enable push notifications</Text>
-          <Switch
-            value={notificationsEnabled}
-            onValueChange={() => setNotificationsEnabled(!notificationsEnabled)}
-          />
-        </View>
-        <View style={styles.settingContainer}>
-          <Text style={TextStyles.bodyMain}>
-            Notify me even if a product matches my allergens
-          </Text>
-          <Switch
-            value={allergenNotificationsEnabled}
-            onValueChange={() =>
-              setAllergenNotificationsEnabled(!allergenNotificationsEnabled)
-            }
-          />
-        </View>
-        <View style={styles.settingContainer}>
-          <Text style={TextStyles.bodyMain}>Only notify me when on campus</Text>
-          <Switch
-            value={campusNotificationsEnabled}
-            onValueChange={() =>
-              setCampusNotificationsEnabled(!campusNotificationsEnabled)
-            }
-          />
-        </View>
-        <View style={styles.settingContainer}>
-          <Text style={TextStyles.bodyMain}>Notify me</Text>
-          <Switch
-            value={notificationTimes}
-            onValueChange={() => setNotificationTimes(!notificationTimes)}
-          />
-        </View>
-        <View style={styles.settingContainer}>
-          <Text style={TextStyles.bodyMain}>
-            Only notify me for certain items
-          </Text>
-          <Switch
-            value={notifyFoods}
-            onValueChange={() => setNotifyFoods(!notifyFoods)}
-          />
-        </View>
+        <Setting
+          text="Enable push notifications"
+          value={notificationsEnabled}
+          onValueChange={setNotificationsEnabled}
+        />
+        <Setting
+          text="Notify me even if a product matches my allergens"
+          value={allergenNotificationsEnabled}
+          onValueChange={setAllergenNotificationsEnabled}
+        />
+        <Setting
+          text="Only notify me when on campus"
+          value={campusNotificationsEnabled}
+          onValueChange={setCampusNotificationsEnabled}
+        />
+        <Setting
+          text="Notify me..."
+          value={notificationTimes}
+          onValueChange={setNotificationTimes}
+        />
+        <Setting
+          text="Only notify me for certain items"
+          value={notifyFoods}
+          onValueChange={setNotifyFoods}
+        />
         {notifyFoods && <FoodsList />}
       </ScrollView>
     </View>
   );
 }
+
+const Setting = ({ text, value, onValueChange }) => {
+  return (
+    <View style={styles.settingContainer}>
+      <Text style={TextStyles.bodyMain}>{text}</Text>
+      <Switch value={value} onValueChange={() => onValueChange(!value)} />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   scrollView: {
