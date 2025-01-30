@@ -47,7 +47,6 @@ function HomeScreen({ navigation, route }) {
       if (data) {
         setFridgeContents(data);
       } else {
-        console.log("NO data or ERROR");
         setFridgeContents(null);
       }
       //once contents have been loaded, set loading to false
@@ -97,8 +96,8 @@ function HomeScreen({ navigation, route }) {
 
   let fridgeNotEmptyContent;
 
-  //if fridge contents have been loaded, render the products
-  if (!loadingContents) {
+  //if fridge contents have been loaded, and the fridge is not empty, render the products
+  if (!loadingContents && fridgeContents !== null) {
     fridgeNotEmptyContent = renderProducts(
       fridgeContents,
       setProductToTake,
@@ -123,7 +122,7 @@ function HomeScreen({ navigation, route }) {
         >
           {loadingContents
             ? loading
-            : fridgeContents === "null"
+            : fridgeContents === null
             ? fridgeEmptyContent
             : fridgeNotEmptyContent}
         </ScrollView>
