@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Switch } from "react-native";
 import DefaultPageStyle from "../styles/DefaultPageStyle";
 import TextStyles from "../styles/TextStyles";
 import { ScrollView } from "react-native-gesture-handler";
+import { FoodsList } from "../components/FoodsList";
 
 export default function SettingsScreen() {
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
@@ -15,7 +16,10 @@ export default function SettingsScreen() {
 
   return (
     <View style={DefaultPageStyle.body}>
-      <ScrollView contentContainerStyle={styles.scrollView}>
+      <ScrollView
+        contentContainerStyle={styles.scrollView}
+        automaticallyAdjustKeyboardInsets={true}
+      >
         <Text style={TextStyles.bodyMain}>
           {/* Here you can configure whether to receive notifications on when new
           items have been added to the fridge. */}
@@ -56,13 +60,14 @@ export default function SettingsScreen() {
         </View>
         <View style={styles.settingContainer}>
           <Text style={TextStyles.bodyMain}>
-            Only notify me for certain foods
+            Only notify me for certain items
           </Text>
           <Switch
             value={notifyFoods}
             onValueChange={() => setNotifyFoods(!notifyFoods)}
           />
         </View>
+        {notifyFoods && <FoodsList />}
       </ScrollView>
     </View>
   );
@@ -77,7 +82,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: 25,
-    borderBottomWidth: 0.5,
+    borderTopWidth: 0.5,
     borderColor: "lightgray",
   },
 });
