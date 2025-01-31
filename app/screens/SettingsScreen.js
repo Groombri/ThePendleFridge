@@ -1,19 +1,51 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import { Text, View, StyleSheet, Switch } from "react-native";
 import DefaultPageStyle from "../styles/DefaultPageStyle";
 import TextStyles from "../styles/TextStyles";
 import { ScrollView } from "react-native-gesture-handler";
 import { FoodsList } from "../components/FoodsList";
 import TimePicker from "../components/TimePicker";
+import UpdateSettings from "../utils/UpdateSettings";
+import ReadSettings from "../utils/ReadSettings";
 
+/**
+ * Displays the users notification settings.
+ *
+ */
 export default function SettingsScreen() {
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  //default values for user settings
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [allergenNotificationsEnabled, setAllergenNotificationsEnabled] =
     useState(false);
   const [campusNotificationsEnabled, setCampusNotificationsEnabled] =
     useState(false);
   const [notificationTimes, setNotificationTimes] = useState(false);
   const [notifyFoods, setNotifyFoods] = useState(false);
+
+  //every time page is rendered, get user settings and display on screen
+  useEffect(() => {
+    const getSettings = async () => {
+      const notifications = await ReadSettings("notificationsEnabled");
+      const allergens = await ReadSettings("notificationsEnabled");
+      const campus = await ReadSettings("campusNotificationsEnabled");
+      const times = await ReadSettings("notificationsEnabled");
+      const foods = await ReadSettings("notificationsEnabled");
+
+      if (notifications !== null) {
+        setNotificationsEnabled(notifications);
+      }
+      if (campus !== null) {
+        setCampusNotificationsEnabled(campus);
+      }
+    };
+
+    getSettings();
+  });
+
+  //asynchronous function to update settings
+  const handleSettingChange = async (settingName, newValue) => {
+    await UpdateSettings(settingName, newValue);
+  };
 
   return (
     <View style={DefaultPageStyle.body}>
@@ -24,7 +56,10 @@ export default function SettingsScreen() {
         <Setting
           text="Enabled"
           value={notificationsEnabled}
-          onValueChange={setNotificationsEnabled}
+          onValueChange={(newValue) => {
+            setNotificationsEnabled(newValue);
+            handleSettingChange("notificationsEnabled", newValue);
+          }}
         />
         <Text style={styles.titleText}>Notify me...</Text>
         <Setting
@@ -35,7 +70,10 @@ export default function SettingsScreen() {
         <Setting
           text="Only when on campus"
           value={campusNotificationsEnabled}
-          onValueChange={setCampusNotificationsEnabled}
+          onValueChange={(newValue) => {
+            setCampusNotificationsEnabled(newValue);
+            handleSettingChange("campusNotificationsEnabled", newValue);
+          }}
         />
         <Setting
           text="Only between certain hours"
@@ -53,7 +91,12 @@ export default function SettingsScreen() {
     </View>
   );
 }
-
+/**
+ * Represents a setting to be rended. Each setting has text, a value, and
+ * a function that is called when its value changes.
+ * As the settings involve switches, therefore boolean values, the value change will
+ * change to the opposite of the value.
+ */
 const Setting = ({ text, value, onValueChange }) => {
   return (
     <View style={styles.settingContainer}>
