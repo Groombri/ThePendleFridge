@@ -5,7 +5,7 @@ import TextStyles from "../styles/TextStyles";
 import { ScrollView } from "react-native-gesture-handler";
 import { FoodsList } from "../components/FoodsList";
 import TimePicker from "../components/TimePicker";
-import UpdateSettings from "../utils/UpdateSettings";
+import handleSettingChange from "../utils/UpdateSettings";
 import ReadSettings from "../utils/ReadSettings";
 
 /**
@@ -19,33 +19,39 @@ export default function SettingsScreen() {
     useState(false);
   const [campusNotificationsEnabled, setCampusNotificationsEnabled] =
     useState(false);
-  const [notificationTimes, setNotificationTimes] = useState(false);
-  const [notifyFoods, setNotifyFoods] = useState(false);
+  const [notificationTimesEnabled, setNotificationTimesEnabled] =
+    useState(false);
+  const [notifyFoodsEnabled, setNotifyFoodsEnabled] = useState(false);
 
   //every time page is rendered, get user settings and display on screen
   useEffect(() => {
     const getSettings = async () => {
-      const notifications = await ReadSettings("notificationsEnabled");
-      const allergens = await ReadSettings("notificationsEnabled");
-      const campus = await ReadSettings("campusNotificationsEnabled");
-      const times = await ReadSettings("notificationsEnabled");
-      const foods = await ReadSettings("notificationsEnabled");
+      const notificationsEnabled = await ReadSettings("notificationsEnabled");
+      const allergensEnabled = await ReadSettings(
+        "allergenNotificationsEnabled"
+      );
+      const campusEnabled = await ReadSettings("campusNotificationsEnabled");
+      const timesEnabled = await ReadSettings("notificationTimesEnabled");
+      const foodsEnabled = await ReadSettings("notifyFoodsEnabled");
 
-      if (notifications !== null) {
-        setNotificationsEnabled(notifications);
+      if (notificationsEnabled !== null) {
+        setNotificationsEnabled(notificationsEnabled);
       }
-      if (campus !== null) {
-        setCampusNotificationsEnabled(campus);
+      if (allergensEnabled !== null) {
+        setAllergenNotificationsEnabled(allergensEnabled);
+      }
+      if (campusEnabled !== null) {
+        setCampusNotificationsEnabled(campusEnabled);
+      }
+      if (timesEnabled !== null) {
+        setNotificationTimesEnabled(timesEnabled);
+      }
+      if (foodsEnabled !== null) {
+        setNotifyFoodsEnabled(foodsEnabled);
       }
     };
-
     getSettings();
-  });
-
-  //asynchronous function to update settings
-  const handleSettingChange = async (settingName, newValue) => {
-    await UpdateSettings(settingName, newValue);
-  };
+  }, []);
 
   return (
     <View style={DefaultPageStyle.body}>
@@ -65,7 +71,10 @@ export default function SettingsScreen() {
         <Setting
           text="Even if a product matches my allergens"
           value={allergenNotificationsEnabled}
-          onValueChange={setAllergenNotificationsEnabled}
+          onValueChange={(newValue) => {
+            setAllergenNotificationsEnabled(newValue);
+            handleSettingChange("allergenNotificationsEnabled", newValue);
+          }}
         />
         <Setting
           text="Only when on campus"
@@ -77,16 +86,26 @@ export default function SettingsScreen() {
         />
         <Setting
           text="Only between certain hours"
-          value={notificationTimes}
-          onValueChange={setNotificationTimes}
+          value={notificationTimesEnabled}
+          onValueChange={(newValue) => {
+            setNotificationTimesEnabled(newValue);
+            handleSettingChange("notificationTimesEnabled", newValue);
+          }}
         />
-        {notificationTimes && <TimePicker />}
+        {notificationTimesEnabled && (
+          <TimePicker notificationTimesEnabled={notificationTimesEnabled} />
+        )}
         <Setting
           text="Only for certain items"
-          value={notifyFoods}
-          onValueChange={setNotifyFoods}
+          value={notifyFoodsEnabled}
+          onValueChange={(newValue) => {
+            setNotifyFoodsEnabled(newValue);
+            handleSettingChange("notifyFoodsEnabled", newValue);
+          }}
         />
-        {notifyFoods && <FoodsList />}
+        {notifyFoodsEnabled && (
+          <FoodsList notifyFoodsEnabled={notifyFoodsEnabled} />
+        )}
       </ScrollView>
     </View>
   );

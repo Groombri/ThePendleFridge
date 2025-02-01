@@ -5,7 +5,7 @@ import * as Device from "expo-device";
 /**
  * Updates a user setting in the user database when changed
  */
-export default async function UpdateSettings(settingName, value) {
+async function UpdateSettings(settingName, value) {
   const userId = Device.osBuildId; //get unique device id
   const userRef = doc(firestore, "users", userId); //get user reference from database
 
@@ -16,3 +16,8 @@ export default async function UpdateSettings(settingName, value) {
     console.error("Error updating settings: ", error);
   }
 }
+
+//asynchronous function to update settings
+export default handleSettingChange = async (settingName, newValue) => {
+  await UpdateSettings(settingName, newValue);
+};

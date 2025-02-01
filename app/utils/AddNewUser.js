@@ -18,6 +18,8 @@ export default async function AddNewUser() {
         notificationsEnabled: false,
         allergenNotificationsEnabled: false,
         campusNotificationsEnabled: false,
+        notificationTimesEnabled: false,
+        notifyFoodsEnabled: false,
         notificationTimes: [],
         notifyFoods: [],
         allergens: [],

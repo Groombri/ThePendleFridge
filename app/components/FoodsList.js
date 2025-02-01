@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import {
   View,
   TouchableOpacity,
@@ -16,9 +16,18 @@ import TextStyles from "../styles/TextStyles";
  * Max number of items is 10
  * Based on https://medium.com/@worachote/building-a-todo-list-app-with-react-native-a-step-by-step-guide-7ed7871d3f98
  */
-export const FoodsList = () => {
+export const FoodsList = ({ notifyFoodsEnabled }) => {
   const [foodList, setFoodList] = useState([]);
   const [text, setText] = useState("");
+  const [notifyFoods, setNotifyFoods] = useState([]);
+
+  //on every rerender, if notificationTimes are enabled, set users notification times to times on the time picker
+  useEffect(() => {
+    if (notifyFoodsEnabled) {
+      setNotifyFoods(foodList);
+      handleSettingChange("notifyFoods", foodList);
+    }
+  }, [foodList, notifyFoodsEnabled]);
 
   /**
    * Adds a food item to the list.
