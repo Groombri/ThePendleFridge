@@ -23,6 +23,7 @@ export default function SettingsScreen() {
     useState(false);
   const [notificationTimes, setNotificationTimes] = useState(null);
   const [notifyFoodsEnabled, setNotifyFoodsEnabled] = useState(false);
+  const [notifyFoods, setNotifyFoods] = useState(null);
 
   //every time page is rendered, get user settings and display on screen
   useEffect(() => {
@@ -35,6 +36,7 @@ export default function SettingsScreen() {
       const timesEnabled = await ReadSettings("notificationTimesEnabled");
       const times = await ReadSettings("notificationTimes");
       const foodsEnabled = await ReadSettings("notifyFoodsEnabled");
+      const foods = await ReadSettings("notifyFoods");
 
       if (notificationsEnabled !== null) {
         setNotificationsEnabled(notificationsEnabled);
@@ -51,6 +53,7 @@ export default function SettingsScreen() {
       }
       if (foodsEnabled !== null) {
         setNotifyFoodsEnabled(foodsEnabled);
+        setNotifyFoods(foods);
       }
     };
     getSettings();
@@ -110,7 +113,10 @@ export default function SettingsScreen() {
           }}
         />
         {notifyFoodsEnabled && (
-          <FoodsList notifyFoodsEnabled={notifyFoodsEnabled} />
+          <FoodsList
+            notifyFoodsEnabled={notifyFoodsEnabled}
+            foods={notifyFoods}
+          />
         )}
       </ScrollView>
     </View>

@@ -16,15 +16,20 @@ import TextStyles from "../styles/TextStyles";
  * Max number of items is 10
  * Based on https://medium.com/@worachote/building-a-todo-list-app-with-react-native-a-step-by-step-guide-7ed7871d3f98
  */
-export const FoodsList = ({ notifyFoodsEnabled }) => {
+export const FoodsList = ({ notifyFoodsEnabled, foods }) => {
   const [foodList, setFoodList] = useState([]);
   const [text, setText] = useState("");
+  const [isFirstRender, setIsFirstRender] = useState(true);
 
   //on every rerender, if notificationTimes are enabled, set users notification times to times on the time picker
   useEffect(() => {
     if (notifyFoodsEnabled) {
-      setNotifyFoods(foodList);
-      handleSettingChange("notifyFoods", foodList);
+      if (isFirstRender) {
+        setFoodList(foods);
+        setIsFirstRender(false);
+      } else {
+        handleSettingChange("notifyFoods", foodList);
+      }
     }
   }, [foodList, notifyFoodsEnabled]);
 
