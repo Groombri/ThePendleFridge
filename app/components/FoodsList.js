@@ -19,7 +19,6 @@ import TextStyles from "../styles/TextStyles";
 export const FoodsList = ({ notifyFoodsEnabled }) => {
   const [foodList, setFoodList] = useState([]);
   const [text, setText] = useState("");
-  const [notifyFoods, setNotifyFoods] = useState([]);
 
   //on every rerender, if notificationTimes are enabled, set users notification times to times on the time picker
   useEffect(() => {

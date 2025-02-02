@@ -21,6 +21,7 @@ export default function SettingsScreen() {
     useState(false);
   const [notificationTimesEnabled, setNotificationTimesEnabled] =
     useState(false);
+  const [notificationTimes, setNotificationTimes] = useState(null);
   const [notifyFoodsEnabled, setNotifyFoodsEnabled] = useState(false);
 
   //every time page is rendered, get user settings and display on screen
@@ -32,6 +33,7 @@ export default function SettingsScreen() {
       );
       const campusEnabled = await ReadSettings("campusNotificationsEnabled");
       const timesEnabled = await ReadSettings("notificationTimesEnabled");
+      const times = await ReadSettings("notificationTimes");
       const foodsEnabled = await ReadSettings("notifyFoodsEnabled");
 
       if (notificationsEnabled !== null) {
@@ -45,6 +47,7 @@ export default function SettingsScreen() {
       }
       if (timesEnabled !== null) {
         setNotificationTimesEnabled(timesEnabled);
+        setNotificationTimes(times);
       }
       if (foodsEnabled !== null) {
         setNotifyFoodsEnabled(foodsEnabled);
@@ -93,7 +96,10 @@ export default function SettingsScreen() {
           }}
         />
         {notificationTimesEnabled && (
-          <TimePicker notificationTimesEnabled={notificationTimesEnabled} />
+          <TimePicker
+            notificationTimesEnabled={notificationTimesEnabled}
+            notificationTimes={notificationTimes}
+          />
         )}
         <Setting
           text="Only for certain items"

@@ -8,19 +8,26 @@ import handleSettingChange from "../utils/UpdateSettings";
  * Allows the user to select two times. For use in notification settings where
  * user will only receive notifications between the two times selected.
  */
-const TimePicker = ({ notificationTimesEnabled }) => {
+const TimePicker = ({ notificationTimesEnabled, notificationTimes }) => {
   const [isTimePickerVisible, setTimePickerVisible] = useState(false);
   const [isTimePicker2Visible, setTimePicker2Visible] = useState(false);
   const [time, setTime] = useState(DateToString(new Date(0, 0, 0, 9, 0)));
   const [time2, setTime2] = useState(DateToString(new Date(0, 0, 0, 17, 0)));
-  const [notificationTimes, setNotificationTimes] = useState([]);
+  const [isFirstRender, setIsFirstRender] = useState(true);
 
   //on every rerender, if notificationTimes are enabled, set users notification times to times on the time picker
   useEffect(() => {
     if (notificationTimesEnabled) {
-      const times = [time, time2];
-      setNotificationTimes(times);
-      handleSettingChange("notificationTimes", times);
+      let times = [time, time2];
+      //if this is the first render, get the times from the users settings
+      if (isFirstRender && notificationTimes.length === 2) {
+        setTime(notificationTimes[0]);
+        setTime2(notificationTimes[1]);
+        times = [time, time2];
+        setIsFirstRender(false);
+      } else {
+        handleSettingChange("notificationTimes", times);
+      }
     }
   }, [time, time2, notificationTimesEnabled]);
 
