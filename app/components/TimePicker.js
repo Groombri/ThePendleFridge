@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Button, View, Text, StyleSheet } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { StringToDate, DateToString } from "../utils/DateUtils";
 import handleSettingChange from "../utils/UpdateSettings";
+const { StringToDate, DateToString } = require("../utils/DateUtils");
 
 /**
  * Allows the user to select two times. For use in notification settings where

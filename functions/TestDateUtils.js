@@ -31,6 +31,10 @@ function DateToString(date) {
  * @returns true if within given times, false if not.
  */
 function WithinGivenTimes(array) {
+  if (!array || array.length < 2 || !array[0] || !array[1]) {
+    console.error("Invalid time array:", array);
+    return false;
+  }
   //get current date/time
   const now = new Date();
 
@@ -49,4 +53,4 @@ function WithinGivenTimes(array) {
     : now >= firstTime && now <= secondTime;
 }
 
-module.exports = { StringToDate, DateToString, WithinGivenTimes };
+module.exports = { WithinGivenTimes };
