@@ -24,7 +24,7 @@ export const FoodsList = ({ notifyFoodsEnabled, foods }) => {
   //on every rerender, if notificationTimes are enabled, set users notification times to times on the time picker
   useEffect(() => {
     if (notifyFoodsEnabled) {
-      if (isFirstRender) {
+      if (isFirstRender && foods.length >= 1) {
         setFoodList(foods);
         setIsFirstRender(false);
       } else {
