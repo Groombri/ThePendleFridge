@@ -27,19 +27,17 @@ exports.notifyUsersOnDonation = onValueCreated(
 
     if (!newProduct) return;
 
-    //get all users
-    const users = await db.collection("users").get();
+    //get all users who have notifications enabled
+    const usersQuery = db
+      .collection("users")
+      .where("notificationsEnabled", "==", true);
+    const users = await usersQuery.get();
 
     const filteredUsers = [];
 
     //for every user
     for (const doc of users.docs) {
       const user = doc.data();
-
-      //don't notify users who have notifications disabled
-      if (!user.notificationsEnabled) {
-        continue;
-      }
 
       //don't notify users where current time doesnt fall between their set notification times
       if (
