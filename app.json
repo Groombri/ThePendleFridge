@@ -13,16 +13,26 @@
       "backgroundColor": "#006400"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.groombri.thependlefridge",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/images/pendle-logo.png",
         "backgroundColor": "#006400"
-      }
+      },
+      "package": "com.groombri.thependlefridge"
     },
     "web": {
       "favicon": "./app/assets/images/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e1b9bcaa-b819-49a3-ab23-dad9171d1459"
+      }
     }
   }
 }
