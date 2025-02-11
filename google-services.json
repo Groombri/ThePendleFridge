@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "524364453306",
+    "firebase_url": "https://the-pendle-fridge-ebc63-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "the-pendle-fridge-ebc63",
+    "storage_bucket": "the-pendle-fridge-ebc63.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:524364453306:android:1e8314156392045cb17983",
+        "android_client_info": {
+          "package_name": "com.groombri.thependlefridge"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5ITrmj3BZzQs-kqCXjjYQfhrU9GpuINc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

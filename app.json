@@ -23,8 +23,9 @@
       }
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
-        "foregroundImage": "./app/assets/images/pendle-logo.png",
+        "foregroundImage": "./app/assets/images/pendle-solid.png",
         "backgroundColor": "#006400"
       },
       "package": "com.groombri.thependlefridge",
