@@ -39,6 +39,11 @@ exports.notifyUsersOnDonation = onValueCreated(
     for (const doc of users.docs) {
       const user = doc.data();
 
+      //don't notify users that only want to be notified on campus and are not currently on campus
+      if (user.campusNotificationsEnabled && !user.isOnCampus) {
+        continue;
+      }
+
       //don't notify users where current time doesnt fall between their set notification times
       if (
         user.notificationTimesEnabled &&

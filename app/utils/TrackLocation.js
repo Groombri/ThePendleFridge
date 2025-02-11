@@ -64,7 +64,7 @@ export const startLocationCheck = async () => {
       return;
     }
 
-    await Location.startGeofencingAsync(TASK, CAMPUS);
+    await Location.startGeofencingAsync(TASK, HOME);
     console.log("Geofencing started");
   } catch (error) {
     console.error(error);
