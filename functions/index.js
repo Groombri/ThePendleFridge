@@ -39,6 +39,11 @@ exports.notifyUsersOnDonation = onValueCreated(
     for (const doc of users.docs) {
       const user = doc.data();
 
+      //don't notify the user that donated the product
+      if (doc.id === newProduct.donorId) {
+        continue;
+      }
+
       //don't notify users that only want to be notified on campus and are not currently on campus
       if (user.campusNotificationsEnabled && !user.isOnCampus) {
         continue;

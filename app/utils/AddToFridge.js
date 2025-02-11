@@ -1,6 +1,7 @@
 import { getDatabase, ref, set, get, child } from "firebase/database";
 import app from "../config/firebaseConfig";
 import { Image } from "react-native";
+import * as Device from "expo-device";
 
 /**
  * Function that takes a foodItem and adds it to the fridge.
@@ -19,6 +20,7 @@ export default function AddToFridge(foodItem) {
   const image = handleUndefined(foodItem, "image");
   const keywords = handleUndefined(foodItem, "keywords");
   const date = handleUndefined(foodItem, "date");
+  const donorId = Device.osBuildId;
 
   //get reference to database and productId
   const dbRef = ref(getDatabase(app));
@@ -54,6 +56,7 @@ export default function AddToFridge(foodItem) {
           image,
           keywords,
           date: foodItem.date,
+          donorId,
         });
       } else {
         //if this product is not in the fridge, add it
@@ -68,6 +71,7 @@ export default function AddToFridge(foodItem) {
           image,
           keywords,
           date,
+          donorId,
         });
       }
     })
