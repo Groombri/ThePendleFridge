@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "DoneWithIt",
+    "name": "Pendle Fridge",
     "slug": "DoneWithIt",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./app/assets/images/pendle-logo.png",
+    "icon": "./app/assets/images/pendle-solid.png",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
@@ -16,7 +16,10 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.groombri.thependlefridge",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "UIBackgroundModes": ["location", "fetch"],
+        "NSLocationWhenInUseUsageDescription": "To detect when you are on campus, access to your location is required.",
+        "NSLocationAlwaysUsageDescription": "Access to background location is required for geofence checking."
       }
     },
     "android": {
@@ -24,7 +27,14 @@
         "foregroundImage": "./app/assets/images/pendle-logo.png",
         "backgroundColor": "#006400"
       },
-      "package": "com.groombri.thependlefridge"
+      "package": "com.groombri.thependlefridge",
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "FOREGROUND_SERVICE",
+        "ACCESS_BACKGROUND_LOCATION"
+      ],
+      "useNextNotificationsApi": true
     },
     "web": {
       "favicon": "./app/assets/images/favicon.png"
@@ -33,6 +43,11 @@
       "eas": {
         "projectId": "e1b9bcaa-b819-49a3-ab23-dad9171d1459"
       }
+    },
+    "notification": {
+      "icon": "./app/assets/images/icon.png",
+      "color": "#000000",
+      "iosDisplayInForeground": true
     }
   }
 }

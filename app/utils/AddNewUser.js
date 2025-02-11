@@ -18,12 +18,13 @@ export default async function AddNewUser() {
         notificationsEnabled: false,
         allergenNotificationsEnabled: false,
         campusNotificationsEnabled: false,
+        isOnCampus: false,
         notificationTimesEnabled: false,
         notifyFoodsEnabled: false,
         notificationTimes: [],
         notifyFoods: [],
         allergens: [],
-        expoPushToken: "",
+        pushToken: "",
       };
 
       await setDoc(userRef, defaultSettings);

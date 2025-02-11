@@ -7,6 +7,8 @@ import { FoodsList } from "../components/FoodsList";
 import TimePicker from "../components/TimePicker";
 import handleSettingChange from "../utils/UpdateSettings";
 import ReadSettings from "../utils/ReadSettings";
+import { startLocationCheck, stopLocationCheck } from "../utils/TrackLocation";
+import { getNotificationPermissions } from "../utils/NotificationsSetup";
 
 /**
  * Displays the users notification settings.
@@ -71,6 +73,11 @@ export default function SettingsScreen() {
           onValueChange={(newValue) => {
             setNotificationsEnabled(newValue);
             handleSettingChange("notificationsEnabled", newValue);
+
+            //get permissions to notify when enabled
+            if (newValue === true) {
+              getNotificationPermissions();
+            }
           }}
         />
         <Text style={styles.titleText}>Notify me...</Text>
@@ -88,6 +95,8 @@ export default function SettingsScreen() {
           onValueChange={(newValue) => {
             setCampusNotificationsEnabled(newValue);
             handleSettingChange("campusNotificationsEnabled", newValue);
+            //if user has enabled option, start tracking their location
+            newValue === true ? startLocationCheck() : stopLocationCheck();
           }}
         />
         <Setting
