@@ -43,6 +43,9 @@ function Accordion({ image, title, children }) {
     productTitle: {
       flexDirection: "row",
       alignItems: "center",
+      flex: 1,
+      flexWrap: "wrap",
+      marginRight: 5,
     },
     productImageContainer: {
       padding: 10,
