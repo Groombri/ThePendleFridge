@@ -79,5 +79,37 @@ exports.notifyUsersOnDonation = onValueCreated(
       filteredUsers.push(user);
     }
     console.log("FILTERED USERS:", filteredUsers);
+
+    //gets the push token for each filtered user
+    const pushTokens = filteredUsers.map((user) => user.pushToken);
+
+    //if push tokens exist for any filtered users, send the notification
+    if (pushTokens.length > 0) {
+      const notification = {
+        to: pushTokens,
+        title: "New product added",
+        body: `${newProduct.name} has been added to the fridge!`,
+      };
+
+      try {
+        const response = await fetch("https://exp.host/--/api/v2/push/send", {
+          method: "POST",
+          headers: {
+            host: "exp.host",
+            accept: "application/json",
+            "accept-encoding": "gzip, deflate",
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(notification),
+        });
+
+        const data = await response.json();
+        console.log("successfully sent message: ", data);
+      } catch (error) {
+        console.error("Error sending notification:", error);
+      }
+    } else {
+      console.log("No users are suitable for notifying");
+    }
   }
 );
