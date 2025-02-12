@@ -1,8 +1,9 @@
 import { React, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import TextStyles from "../styles/TextStyles";
 import Entypo from "@expo/vector-icons/Entypo";
 import { ViewImageModal } from "./ViewImageModal";
+import { Image } from "expo-image";
 
 /**
  * Collapsible accordion to toggle display of all product info

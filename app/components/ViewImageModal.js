@@ -1,6 +1,7 @@
 import React from "react";
-import { StyleSheet, Modal, Image, Pressable } from "react-native";
+import { StyleSheet, Modal, Pressable } from "react-native";
 import { SnapbackZoom } from "react-native-zoom-toolkit";
+import { Image } from "expo-image";
 
 /**
  * Allows user to view a product image in a larger, zoomable modal

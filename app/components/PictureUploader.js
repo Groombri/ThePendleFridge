@@ -1,7 +1,11 @@
 import React from "react";
-import { View, Image, TouchableOpacity, Alert, StyleSheet } from "react-native";
+import { View, TouchableOpacity, Alert, StyleSheet } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { storage } from "../config/firebaseConfig";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import uuid from "react-native-uuid";
+import { Image } from "expo-image";
 
 /**
  * Allows the user to upload their own photo of the product.
@@ -29,7 +33,25 @@ const PictureUploader = ({ imageUri, setImageUri }) => {
 
     //if the user doesnt cancel the upload at any point, set the new image to the uploaded image
     if (!result.canceled) {
-      setImageUri(result.assets[0].uri);
+      imageUri = result.assets[0].uri;
+      await storeImage(imageUri);
+    }
+  };
+
+  const storeImage = async (imageUri) => {
+    try {
+      const response = await fetch(imageUri);
+      const blob = await response.blob();
+      const storageRef = ref(storage, `productImages/${uuid.v4()}.jpg`);
+
+      await uploadBytes(storageRef, blob);
+
+      const downloadUrl = await getDownloadURL(storageRef);
+
+      setImageUri(downloadUrl);
+    } catch (error) {
+      Alert.alert("Upload failed", "Something went wrong");
+      console.error(error);
     }
   };
 

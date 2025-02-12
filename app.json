@@ -19,7 +19,8 @@
         "ITSAppUsesNonExemptEncryption": false,
         "UIBackgroundModes": ["location", "fetch"],
         "NSLocationWhenInUseUsageDescription": "To detect when you are on campus, access to your location is required.",
-        "NSLocationAlwaysUsageDescription": "Access to background location is required for geofence checking."
+        "NSLocationAlwaysUsageDescription": "Access to background location is required for geofence checking.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "To detect when you are on campus, access to your location is required."
       }
     },
     "android": {
@@ -46,8 +47,8 @@
       }
     },
     "notification": {
-      "icon": "./app/assets/images/icon.png",
-      "color": "#000000",
+      "icon": "./app/assets/images/pendle.png",
+      "color": "#006400",
       "iosDisplayInForeground": true
     }
   }

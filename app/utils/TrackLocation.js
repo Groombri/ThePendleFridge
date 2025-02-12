@@ -16,42 +16,44 @@ const CAMPUS = [
   },
 ];
 
-//FOR TESTING: define home geofence
-const HOME = [
-  {
-    identifier: "Home",
-    latitude: 54.038622,
-    longitude: -2.793364,
-    radius: 800,
-  },
-];
-
+/**
+ * The task to be carried out when there is a geofencing location event.
+ * In this case, it checks the users location and updates the isOnCampus field in the
+ * database to if they are on campus or not.
+ */
 TaskManager.defineTask(TASK, ({ data: { eventType, region }, error }) => {
   if (error) {
     console.error(error);
     return;
   }
 
-  const userOnCampus = eventType === Location.GeofencingEventType.Enter;
-  handleSettingChange("isOnCampus", userOnCampus);
+  if (eventType === Location.GeofencingRegionState.Inside) {
+    handleSettingChange("isOnCampus", true);
+  } else if (eventType === Location.GeofencingRegionState.Outside) {
+    handleSettingChange("isOnCampus", false);
+  }
 });
 
+//starts location tracking
 export const startLocationCheck = async () => {
-  //request permissions
-  const { status: foregroundStatus } =
-    await Location.requestForegroundPermissionsAsync();
-  console.log("Foreground Permission Status:", foregroundStatus);
-
-  if (foregroundStatus !== "granted") {
-    Alert.alert(
-      "Permission denied",
-      "Please grant permission to access foreground location."
-    );
-    return;
-  }
-
+  //upon first instance, location permissions are needed
   try {
+    //get foreground location permissions
+    const { status: foregroundStatus } =
+      await Location.requestForegroundPermissionsAsync();
+    console.log("Foreground Permission Status:", foregroundStatus);
+
+    if (foregroundStatus !== "granted") {
+      Alert.alert(
+        "Permission denied",
+        "Please grant permission to access foreground location."
+      );
+      return;
+    }
+
     console.log("awaiting request for background...");
+
+    //get background location permissions
     const { status: backgroundStatus } =
       await Location.requestBackgroundPermissionsAsync();
     console.log("Background Permission Status:", backgroundStatus);
@@ -64,14 +66,18 @@ export const startLocationCheck = async () => {
       return;
     }
 
-    await Location.startGeofencingAsync(TASK, HOME);
+    //if permissions have been granted, start checking whether user is on campus
+    await Location.startGeofencingAsync(TASK, CAMPUS, {
+      accuracy: Location.Accuracy.High,
+    });
     console.log("Geofencing started");
   } catch (error) {
     console.error(error);
   }
 };
 
+//stops checking the users location
 export const stopLocationCheck = async () => {
   await Location.stopGeofencingAsync(TASK);
-  console.log("geofencing stopped");
+  console.log("Geofencing stopped");
 };
