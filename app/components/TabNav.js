@@ -11,13 +11,15 @@ const Tab = createMaterialTopTabNavigator();
 /**
  * A tab navigator for navigating between the NotificationsScreen and the SettingsScreen.
  */
-export default function TabNav() {
+export default function TabNav({ notifications }) {
   return (
     <View style={DefaultPageStyle.container}>
       <CustomHeader title="Notifications" />
       <View style={DefaultPageStyle.body}>
         <Tab.Navigator screenOptions={screenOptions}>
-          <Tab.Screen name="My Notifications" component={NotificationsScreen} />
+          <Tab.Screen name="My Notifications">
+            {() => <NotificationsScreen notifications={notifications} />}
+          </Tab.Screen>
           <Tab.Screen name="Settings" component={SettingsScreen} />
         </Tab.Navigator>
       </View>

@@ -38,6 +38,7 @@ const PictureUploader = ({ imageUri, setImageUri }) => {
     }
   };
 
+  //stores the image in firebase storage so that other devices can view it
   const storeImage = async (imageUri) => {
     try {
       const response = await fetch(imageUri);

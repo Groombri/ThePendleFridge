@@ -12,11 +12,13 @@ import TabNav from "./TabNav";
 
 const Drawer = createDrawerNavigator();
 
-const DrawerNav = () => {
+const DrawerNav = ({ notifications }) => {
   return (
     <Drawer.Navigator initialRouteName="Home" screenOptions={screenOptions}>
       <Drawer.Screen name="Home" component={HomeScreen} />
-      <Drawer.Screen name="Notifications" component={TabNav} />
+      <Drawer.Screen name="Notifications">
+        {() => <TabNav notifications={notifications} />}
+      </Drawer.Screen>
       <Drawer.Screen name="How to use" component={HelpScreen} />
       <Drawer.Screen name="About" component={AboutScreen} />
       <Drawer.Screen

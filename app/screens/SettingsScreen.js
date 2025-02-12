@@ -17,8 +17,6 @@ import { getNotificationPermissions } from "../utils/NotificationsSetup";
 export default function SettingsScreen() {
   //default values for user settings
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
-  const [allergenNotificationsEnabled, setAllergenNotificationsEnabled] =
-    useState(false);
   const [campusNotificationsEnabled, setCampusNotificationsEnabled] =
     useState(false);
   const [notificationTimesEnabled, setNotificationTimesEnabled] =
@@ -31,9 +29,6 @@ export default function SettingsScreen() {
   useEffect(() => {
     const getSettings = async () => {
       const notificationsEnabled = await ReadSettings("notificationsEnabled");
-      const allergensEnabled = await ReadSettings(
-        "allergenNotificationsEnabled"
-      );
       const campusEnabled = await ReadSettings("campusNotificationsEnabled");
       const timesEnabled = await ReadSettings("notificationTimesEnabled");
       const times = await ReadSettings("notificationTimes");
@@ -42,9 +37,6 @@ export default function SettingsScreen() {
 
       if (notificationsEnabled !== null) {
         setNotificationsEnabled(notificationsEnabled);
-      }
-      if (allergensEnabled !== null) {
-        setAllergenNotificationsEnabled(allergensEnabled);
       }
       if (campusEnabled !== null) {
         setCampusNotificationsEnabled(campusEnabled);
@@ -80,52 +72,48 @@ export default function SettingsScreen() {
             }
           }}
         />
-        <Text style={styles.titleText}>Notify me...</Text>
-        <Setting
-          text="Even if a product matches my allergens"
-          value={allergenNotificationsEnabled}
-          onValueChange={(newValue) => {
-            setAllergenNotificationsEnabled(newValue);
-            handleSettingChange("allergenNotificationsEnabled", newValue);
-          }}
-        />
-        <Setting
-          text="Only when on campus"
-          value={campusNotificationsEnabled}
-          onValueChange={(newValue) => {
-            setCampusNotificationsEnabled(newValue);
-            handleSettingChange("campusNotificationsEnabled", newValue);
-            //if user has enabled option, start tracking their location
-            newValue === true ? startLocationCheck() : stopLocationCheck();
-          }}
-        />
-        <Setting
-          text="Only between certain hours"
-          value={notificationTimesEnabled}
-          onValueChange={(newValue) => {
-            setNotificationTimesEnabled(newValue);
-            handleSettingChange("notificationTimesEnabled", newValue);
-          }}
-        />
-        {notificationTimesEnabled && (
-          <TimePicker
-            notificationTimesEnabled={notificationTimesEnabled}
-            notificationTimes={notificationTimes}
-          />
-        )}
-        <Setting
-          text="Only for certain items"
-          value={notifyFoodsEnabled}
-          onValueChange={(newValue) => {
-            setNotifyFoodsEnabled(newValue);
-            handleSettingChange("notifyFoodsEnabled", newValue);
-          }}
-        />
-        {notifyFoodsEnabled && (
-          <FoodsList
-            notifyFoodsEnabled={notifyFoodsEnabled}
-            foods={notifyFoods}
-          />
+        {notificationsEnabled && (
+          <>
+            <Text style={styles.titleText}>Notify me...</Text>
+            <Setting
+              text="Only when on campus"
+              value={campusNotificationsEnabled}
+              onValueChange={(newValue) => {
+                setCampusNotificationsEnabled(newValue);
+                handleSettingChange("campusNotificationsEnabled", newValue);
+                //if user has enabled option, start tracking their location
+                newValue === true ? startLocationCheck() : stopLocationCheck();
+              }}
+            />
+            <Setting
+              text="Only between certain hours"
+              value={notificationTimesEnabled}
+              onValueChange={(newValue) => {
+                setNotificationTimesEnabled(newValue);
+                handleSettingChange("notificationTimesEnabled", newValue);
+              }}
+            />
+            {notificationTimesEnabled && (
+              <TimePicker
+                notificationTimesEnabled={notificationTimesEnabled}
+                notificationTimes={notificationTimes}
+              />
+            )}
+            <Setting
+              text="Only for certain items"
+              value={notifyFoodsEnabled}
+              onValueChange={(newValue) => {
+                setNotifyFoodsEnabled(newValue);
+                handleSettingChange("notifyFoodsEnabled", newValue);
+              }}
+            />
+            {notifyFoodsEnabled && (
+              <FoodsList
+                notifyFoodsEnabled={notifyFoodsEnabled}
+                foods={notifyFoods}
+              />
+            )}
+          </>
         )}
       </ScrollView>
     </View>

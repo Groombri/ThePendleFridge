@@ -16,7 +16,6 @@ export default async function AddNewUser() {
     if (!userDoc.exists()) {
       const defaultSettings = {
         notificationsEnabled: false,
-        allergenNotificationsEnabled: false,
         campusNotificationsEnabled: false,
         isOnCampus: false,
         notificationTimesEnabled: false,

@@ -3,11 +3,12 @@ import { NavigationContainer } from "@react-navigation/native";
 import DrawerNav from "./app/components/DrawerNav";
 import SafeViewAndroid from "./app/styles/SafeViewAndroid";
 import * as ScreenOrientation from "expo-screen-orientation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import AddNewUser from "./app/utils/AddNewUser";
 import * as Notifications from "expo-notifications";
 import ReadSettings from "./app/utils/ReadSettings";
 import { startLocationCheck } from "./app/utils/TrackLocation";
+import NotificationsScreen from "./app/screens/NotificationsScreen";
 
 /**
  * The Pendle fridge app driver. Ensures that all contents are contained within a custom SafeAreaView.
@@ -17,6 +18,7 @@ import { startLocationCheck } from "./app/utils/TrackLocation";
 export default function App() {
   const notificationListener = useRef();
   const responseListener = useRef();
+  const [notifications, setNotifications] = useState([]);
 
   //things to initialise upon opening the app
   useEffect(() => {
@@ -49,7 +51,7 @@ export default function App() {
 
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
-        console.log("Notification Received:", notification);
+        setNotifications([...notifications, notification]);
       });
 
     responseListener.current =
@@ -69,7 +71,7 @@ export default function App() {
     <View style={{ flex: 1, backgroundColor: "transparent" }}>
       <SafeAreaView style={SafeViewAndroid.AndroidSafeArea}>
         <NavigationContainer>
-          <DrawerNav />
+          <DrawerNav notifications={notifications} />
         </NavigationContainer>
       </SafeAreaView>
       <View style={{ backgroundColor: "transparent", height: 34 }} />
