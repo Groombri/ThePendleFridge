@@ -13,14 +13,21 @@
       "backgroundColor": "#006400"
     },
     "ios": {
+      "entitlements": {
+        "aps-environment": "development"
+      },
       "supportsTablet": true,
       "bundleIdentifier": "com.groombri.thependlefridge",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
-        "UIBackgroundModes": ["location", "fetch"],
+        "UIBackgroundModes": ["location", "fetch", "remote-notification"],
         "NSLocationWhenInUseUsageDescription": "To detect when you are on campus, access to your location is required.",
         "NSLocationAlwaysUsageDescription": "Access to background location is required for geofence checking.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "To detect when you are on campus, access to your location is required."
+      },
+      "backgroundFetch": {
+        "enabled": true,
+        "minimumInterval": 60
       }
     },
     "android": {
@@ -36,7 +43,11 @@
         "FOREGROUND_SERVICE",
         "ACCESS_BACKGROUND_LOCATION"
       ],
-      "useNextNotificationsApi": true
+      "useNextNotificationsApi": true,
+      "backgroundFetch": {
+        "enabled": true,
+        "minimumInterval": 60
+      }
     },
     "web": {
       "favicon": "./app/assets/images/favicon.png"
@@ -49,7 +60,16 @@
     "notification": {
       "icon": "./app/assets/images/pendle.png",
       "color": "#006400",
-      "iosDisplayInForeground": true
+      "iosDisplayInForeground": true,
+      "contentAvailable": true,
+      "priority": "high",
+      "android": {
+        "priority": "high",
+        "vibrate": true,
+        "sound": "default",
+        "badge": true,
+        "contentAvailable": true
+      }
     }
   }
 }

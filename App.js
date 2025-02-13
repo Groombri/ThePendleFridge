@@ -51,7 +51,8 @@ export default function App() {
 
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
-        setNotifications([...notifications, notification]);
+        console.log("notification received!");
+        setNotifications((previous) => [...previous, notification]);
       });
 
     responseListener.current =

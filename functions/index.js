@@ -27,8 +27,6 @@ exports.notifyUsersOnDonation = onValueCreated(
 
     if (!newProduct) return;
 
-    console.log(newProduct.name);
-
     //get all users who have notifications enabled
     const usersQuery = db
       .collection("users")
@@ -94,12 +92,20 @@ exports.notifyUsersOnDonation = onValueCreated(
     if (pushTokens.length > 0) {
       const notification = {
         to: pushTokens,
-        title: "New product added 🔔",
-        body: `${newProduct.name} has been added to the fridge!`,
+        // title: "New product added 🔔",
+        // body: `${newProduct.name} has been added to the fridge!`,
+        _contentAvailable: true,
+        "content-available": 1,
+        "mutable-content": 1,
         data: {
           productName: newProduct.name,
           date: newProduct.date,
           productImage: newProduct.image,
+        },
+        priority: "high",
+        ios: {
+          sound: "default",
+          badge: 1,
         },
       };
 
