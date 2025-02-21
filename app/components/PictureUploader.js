@@ -1,5 +1,11 @@
-import React from "react";
-import { View, TouchableOpacity, Alert, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  TouchableOpacity,
+  Alert,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { storage } from "../config/firebaseConfig";
@@ -15,6 +21,8 @@ import { Image } from "expo-image";
  * @returns JSX touchable product image
  */
 const PictureUploader = ({ imageUri, setImageUri }) => {
+  const [uploading, setUploading] = useState(false);
+
   const handleTakePicture = async () => {
     //request camera permissions
     const permission = await ImagePicker.requestCameraPermissionsAsync();
@@ -34,7 +42,9 @@ const PictureUploader = ({ imageUri, setImageUri }) => {
     //if the user doesnt cancel the upload at any point, set the new image to the uploaded image
     if (!result.canceled) {
       imageUri = result.assets[0].uri;
+      setUploading(true);
       await storeImage(imageUri);
+      setUploading(false);
     }
   };
 
@@ -67,14 +77,18 @@ const PictureUploader = ({ imageUri, setImageUri }) => {
       }
     >
       <View style={styles.imageContainer}>
-        <Image
-          source={
-            imageUri
-              ? { uri: imageUri }
-              : require("../assets/images/no-image.png") // Fallback image
-          }
-          style={styles.productImage}
-        />
+        {uploading ? (
+          <ActivityIndicator size="large" color="green" />
+        ) : (
+          <Image
+            source={
+              imageUri
+                ? { uri: imageUri }
+                : require("../assets/images/no-image.png") // Fallback image
+            }
+            style={styles.productImage}
+          />
+        )}
         <View style={styles.uploadIcon}>
           <AntDesign name="cloudupload" size={30} color="rgb(21, 102, 207)" />
         </View>

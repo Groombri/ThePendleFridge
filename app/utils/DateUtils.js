@@ -49,4 +49,20 @@ function WithinGivenTimes(array) {
     : now >= firstTime && now <= secondTime;
 }
 
-module.exports = { StringToDate, DateToString, WithinGivenTimes };
+/**
+ * Sorts an array of products by date (most recently donated).
+ * @param {*} array the fridge contents array
+ * @returns fridge contents sorted by most recently donated
+ */
+function SortByDate(array) {
+  try {
+    return array.sort(([firstId, firstProduct], [secondId, secondProduct]) => {
+      return secondProduct.dateInUnix - firstProduct.dateInUnix;
+    });
+  } catch (error) {
+    console.error("Error, array does not match valid format.", error);
+    return [];
+  }
+}
+
+module.exports = { StringToDate, DateToString, WithinGivenTimes, SortByDate };

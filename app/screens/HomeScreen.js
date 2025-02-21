@@ -17,6 +17,7 @@ import Accordion from "../components/Accordion";
 import YellowButton from "../components/YellowButton";
 import Animated, { FadeInDown, FadeOut } from "react-native-reanimated";
 import { QuantityPicker } from "../components/QuantityPicker";
+import { SortByDate } from "../utils/DateUtils";
 
 /**
  * The application's home screen. This includes the apps custom header + donate an item button.
@@ -78,6 +79,8 @@ function HomeScreen({ navigation, route }) {
       <Image
         style={styles.empty_icon}
         source={require("../assets/images/empty.png")}
+        accessible={true}
+        accessibilityLabel="Picture of an empty fridge"
       />
       <Text style={TextStyles.bodyMain}>
         It looks like there's no food in at the moment...
@@ -155,13 +158,20 @@ function renderProducts(
   setProductToTakeID,
   setQuantityPickerVisible
 ) {
+  //sort fridge contents by most recently donated
+  const contentsSortedByDate = SortByDate(Object.entries(fridgeContents));
+
   return (
     <>
-      <View style={styles.inventoryHeader}>
+      <View
+        style={styles.inventoryHeader}
+        accessible={true}
+        accessibilityLabel="Home screen"
+      >
         <Text style={TextStyles.bodyTitle}>What's in?</Text>
       </View>
       {/* for every item in the fridge, display accordion with its details */}
-      {Object.entries(fridgeContents).map(([id, product]) => (
+      {contentsSortedByDate.map(([id, product]) => (
         <Accordion key={id} image={product.image} title={product.name}>
           <Text style={TextStyles.small}>
             Name: <Text style={TextStyles.smallBold}>{product.name}</Text>

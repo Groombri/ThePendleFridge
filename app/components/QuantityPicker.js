@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import YellowButton from "./YellowButton";
 import ModalStyles from "../styles/ModalStyles";
@@ -28,6 +29,9 @@ import UpdateFridge from "../utils/UpdateFridge";
 export const QuantityPicker = ({ product, id, onClose }) => {
   //select the first item on the ScrollPicker by default
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  //for awaiting update fridge to be resolved
+  const [loading, setLoading] = useState(false);
 
   //initialise quantity options (available quantities the user can take for the product)
   const quantity = product.quantity;
@@ -96,17 +100,22 @@ export const QuantityPicker = ({ product, id, onClose }) => {
                 itemTextStyle={{ fontFamily: "Poppins", fontSize: 20 }}
               />
             </View>
-            <YellowButton
-              title="Confirm"
-              onPress={() =>
-                handleButtonPress(
-                  product,
-                  id,
-                  quantityOptions[selectedIndex],
-                  onClose
-                )
-              }
-            />
+            {loading ? (
+              <ActivityIndicator size="large" color="green" />
+            ) : (
+              <YellowButton
+                title="Confirm"
+                onPress={() =>
+                  handleButtonPress(
+                    product,
+                    id,
+                    quantityOptions[selectedIndex],
+                    onClose,
+                    setLoading
+                  )
+                }
+              />
+            )}
           </View>
         </View>
       </Modal>
@@ -121,7 +130,7 @@ export const QuantityPicker = ({ product, id, onClose }) => {
  * @param {*} product
  * @param {*} quantity
  */
-function handleButtonPress(product, id, quantity, onClose) {
+function handleButtonPress(product, id, quantity, onClose, setLoading) {
   const confirmString =
     quantity === 1
       ? `Do you wish to take the ${product.name}?`
@@ -135,9 +144,19 @@ function handleButtonPress(product, id, quantity, onClose) {
     },
     {
       text: "Continue",
-      onPress: () => {
-        UpdateFridge(id, quantity);
-        onClose();
+      onPress: async () => {
+        setLoading(true);
+        try {
+          await UpdateFridge(id, quantity);
+          setLoading(false);
+          onClose();
+        } catch (error) {
+          setLoading(false);
+          Alert.alert(
+            "Error",
+            "The request timed out. Please check your internet connection and try again."
+          );
+        }
       },
     },
   ]);

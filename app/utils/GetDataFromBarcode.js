@@ -18,8 +18,18 @@ export default GetDataFromBarcode = async (barcode) => {
    */
   const userAgent = "The Pendle Fridge - Android/iOS - Version 1.0 - N/A";
 
+  //abort the fetch if it takes longer than 20 seconds
+  const controller = new AbortController();
+  const signal = controller.signal;
+  const timeout = setTimeout(() => controller.abort(), 20000);
+
   try {
-    let response = await fetch(url, { headers: { "USER-AGENT": userAgent } });
+    let response = await fetch(url, {
+      headers: { "USER-AGENT": userAgent },
+      signal,
+    });
+    clearTimeout(timeout);
+
     const data = await response.json();
 
     //if product is found in database, extract desired data
@@ -56,7 +66,10 @@ export default GetDataFromBarcode = async (barcode) => {
       return undefined;
     }
   } catch (error) {
-    console.error("Error fetching data", error);
-    return "error";
+    if (error.name === "AbortError") {
+      return "abort error";
+    } else {
+      return "error";
+    }
   }
 };

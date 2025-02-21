@@ -18,12 +18,12 @@ TaskManager.defineTask(BACKGROUND_LISTENER, async ({ data, error }) => {
       data.data === undefined ? data.body : JSON.parse(data.data.body);
     const { productName, date, productImage } = dataContent;
 
+    console.log(data);
     await Notifications.scheduleNotificationAsync({
-      content: {
-        title: "New product added 🔔", // Title for the notification
-        body: `${productName} has been added to the fridge!`, // Body of the notification
-        data: { productName, date, productImage }, // Data to be used by the app
-      },
+      // title: "New product added 🔔", // Title for the notification
+      // body: `${productName} has been added to the fridge!`, // Body of the notification
+      data: { productName, date, productImage }, // Data to be used by the app
+
       trigger: null,
       content_available: true,
     });

@@ -13,40 +13,40 @@ import app from "../config/firebaseConfig";
  * When the user takes a certain quantity of an item, this will be updated.
  * see https://firebase.google.com/docs/database/web/read-and-write#updating_or_deleting_data
  */
-export default function UpdateFridge(id, quantityTaken) {
-  //get reference to database and productId
-  const dbRef = ref(getDatabase(app));
-  const productRef = child(dbRef, "product/" + id);
+export default async function UpdateFridge(id, quantityTaken) {
+  try {
+    //get reference to database and productId
+    const dbRef = ref(getDatabase(app));
+    const productRef = child(dbRef, "product/" + id);
 
-  //check if the productId is already in the fridge database
-  get(productRef)
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        const existingProduct = snapshot.val();
+    //check if the productId is already in the fridge database
+    const snapshot = await get(productRef);
 
-        //if user decided to take the whole stock of an item, remove it from the fridge
-        if (
-          quantityTaken === "Take all remaining" ||
-          quantityTaken >= existingProduct.quantity
-        ) {
-          remove(productRef);
-        } else if (quantityTaken === "Take some") {
-          //in case of take "some" from uncountable item, do nothing
-        }
-        //if user decided to take only some of the item, update its quantity
-        else if (quantityTaken < existingProduct.quantity) {
-          const newQuantity = existingProduct.quantity - quantityTaken;
+    if (snapshot.exists()) {
+      const existingProduct = snapshot.val();
 
-          update(productRef, {
-            quantity: newQuantity,
-          });
-        }
-      } else {
-        //if this product is not in the fridge, error
-        console.error("Could not find selected product in the fridge");
+      //if user decided to take the whole stock of an item, remove it from the fridge
+      if (
+        quantityTaken === "Take all remaining" ||
+        quantityTaken >= existingProduct.quantity
+      ) {
+        remove(productRef);
+      } else if (quantityTaken === "Take some") {
+        //in case of take "some" from uncountable item, do nothing
       }
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+      //if user decided to take only some of the item, update its quantity
+      else if (quantityTaken < existingProduct.quantity) {
+        const newQuantity = existingProduct.quantity - quantityTaken;
+
+        update(productRef, {
+          quantity: newQuantity,
+        });
+      }
+    } else {
+      //if this product is not in the fridge, error
+      console.error("Could not find selected product in the fridge");
+    }
+  } catch (error) {
+    console.error("Error updating fridge: ", error);
+  }
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { CameraView, Camera } from "expo-camera";
-import { StyleSheet, Text, View, Alert } from "react-native";
+import { StyleSheet, Text, View, Alert, ActivityIndicator } from "react-native";
 import YellowButton from "./YellowButton";
 import GetDataFromBarcode from "../utils/GetDataFromBarcode";
 
@@ -15,6 +15,7 @@ const BarcodeScanner = () => {
   const navigation = useNavigation(); //hook allows access to navigation functionality, as isn't passed as prop
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   /**
    * Thanks to https://stackoverflow.com/questions/77415039/cannot-set-expo-camera-scan-interval
@@ -62,17 +63,53 @@ const BarcodeScanner = () => {
     lastScannedTimeRef.current = time;
 
     setScanned(true);
+    setLoading(true);
     handleScannedData({ type, data });
   };
 
   //Processes the scanned data
   const handleScannedData = async ({ type, data }) => {
-    //gets the product information as JSON object
-    const scannedItem = await GetDataFromBarcode(data);
-    console.log(scannedItem);
+    try {
+      //gets the product information as JSON object
+      const scannedItem = await GetDataFromBarcode(data);
 
-    //parses the scannedItem into the home screen so it can display the ItemInfoModal
-    navigation.navigate("Home", { scannedItem });
+      //if scannedItem exists and has scanned successfully:
+      if (
+        scannedItem &&
+        scannedItem !== "error" &&
+        scannedItem !== "abort error"
+      ) {
+        console.log(scannedItem);
+        //parse the scannedItem into the home screen so it can display the ItemInfoModal
+        navigation.navigate("Home", { scannedItem });
+      }
+      //if not, alert the user that the data cannot be fetched from the barcode
+      else {
+        //alert that lets user know it was a connection issue
+        if (scannedItem === "abort error") {
+          Alert.alert(
+            "Error",
+            "The request timed out. Please check your internet connection and try again."
+          );
+        }
+        //alert that lets the user know that the product data wasn't found
+        else {
+          Alert.alert(
+            "Product not found",
+            "It seems like we don't have the data for this product. Please donate using another option."
+          );
+        }
+        navigation.navigate("Home");
+      }
+    } catch (error) {
+      Alert.alert(
+        "Error",
+        "The request failed. Please try again or donate another way."
+      );
+      navigation.navigate("Home");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -84,9 +121,13 @@ const BarcodeScanner = () => {
       }}
     >
       <View style={styles.textContainer}>
-        <Text style={styles.instructionText}>
-          Point the camera at a barcode
-        </Text>
+        {loading ? (
+          <ActivityIndicator size="large" color="#FFB900" />
+        ) : (
+          <Text style={styles.instructionText}>
+            Point the camera at a barcode
+          </Text>
+        )}
       </View>
       <View style={styles.closeButtonContainer}>
         <YellowButton

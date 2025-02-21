@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import YellowButton from "./YellowButton";
@@ -43,6 +44,9 @@ const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
   const [subTitle, setSubTitle] = useState(
     "Some data from the barcode scan may be missing or incorrect."
   );
+
+  //for awaiting add to fridge to be resolved
+  const [loading, setLoading] = useState(false);
 
   //on each re-render
   useEffect(() => {
@@ -174,19 +178,28 @@ const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
                     maxLength={300}
                   />
                 </View>
-                <YellowButton
-                  title="Donate item"
-                  onPress={() => {
-                    //only close the modal if the info is valid
-                    if (validateInfo(scannedItem) === true) {
-                      Alert.alert(
-                        "Item added",
-                        "Thank you for your donation ❤️"
+                {loading ? (
+                  <ActivityIndicator size="large" color="green" />
+                ) : (
+                  <YellowButton
+                    title="Donate item"
+                    onPress={async () => {
+                      //only close the modal if the info is valid
+                      const isValid = await validateInfo(
+                        scannedItem,
+                        setLoading
                       );
-                      onClose();
-                    }
-                  }}
-                />
+
+                      if (isValid === true) {
+                        Alert.alert(
+                          "Item added",
+                          "Thank you for your donation ❤️"
+                        );
+                        onClose();
+                      }
+                    }}
+                  />
+                )}
               </ScrollView>
             </View>
           </View>
@@ -204,7 +217,7 @@ const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
      * Name must not be empty
      * Size, ingredients, allergens, traces optional
      */
-    function validateInfo(scannedItem) {
+    async function validateInfo(scannedItem, setLoading) {
       //reject if there is no product name (null or white space)
       if (!name || name.trim() === "") {
         Alert.alert("Donation failed", "Product name required");
@@ -224,8 +237,20 @@ const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
         scannedItem.keywords
       );
 
-      AddToFridge(JSON.parse(finalItem));
-      return true;
+      setLoading(true);
+
+      try {
+        await AddToFridge(JSON.parse(finalItem));
+        setLoading(false);
+        return true;
+      } catch (error) {
+        setLoading(false);
+        Alert.alert(
+          "Error",
+          "The request timed out. Please check your internet connection and try again."
+        );
+        return false;
+      }
     }
   }
 };

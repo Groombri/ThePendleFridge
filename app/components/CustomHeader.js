@@ -13,7 +13,12 @@ function CustomHeader({ title, route, navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
 
   return (
-    <View style={styles.header}>
+    <View
+      style={styles.header}
+      accessible={true}
+      accessibilityLabel={title}
+      accessibilityRole="header"
+    >
       <View style={styles.header_main}>
         <MenuButton />
         <Text style={styles.title_text}>{title}</Text>
