@@ -12,7 +12,7 @@ import CustomHeader from "../components/CustomHeader";
 import TextStyles from "../styles/TextStyles";
 import ReadFridge from "../utils/ReadFridge";
 import ItemInfoModal from "../components/ItemInfoModal";
-import { RefreshControl } from "react-native-gesture-handler";
+import { RefreshControl, TextInput } from "react-native-gesture-handler";
 import Accordion from "../components/Accordion";
 import YellowButton from "../components/YellowButton";
 import Animated, { FadeInDown, FadeOut } from "react-native-reanimated";
@@ -34,6 +34,7 @@ function HomeScreen({ navigation, route }) {
   const [refreshing, setRefreshing] = useState(false);
   const [fridgeContents, setFridgeContents] = useState(null); //fridge contents are set to null by default
   const [loadingContents, setLoadingContents] = useState(true); //loads fridge contents from start
+  const [currentSearch, setCurrentSearch] = useState(""); //the product currently being searched for by the user
 
   //Read the fridges contents when HomeScreen mounts
   useEffect(() => {
@@ -105,7 +106,9 @@ function HomeScreen({ navigation, route }) {
       fridgeContents,
       setProductToTake,
       setProductToTakeID,
-      setQuantityPickerVisible
+      setQuantityPickerVisible,
+      currentSearch,
+      setCurrentSearch
     );
   }
 
@@ -156,10 +159,19 @@ function renderProducts(
   fridgeContents,
   setProductToTake,
   setProductToTakeID,
-  setQuantityPickerVisible
+  setQuantityPickerVisible,
+  currentSearch,
+  setCurrentSearch
 ) {
+  //if the user has searched for an item, only render this
+  const contentsFilteredBySearch = Object.entries(fridgeContents).filter(
+    ([id, product]) => {
+      return product.name.toLowerCase().includes(currentSearch.toLowerCase());
+    }
+  );
+
   //sort fridge contents by most recently donated
-  const contentsSortedByDate = SortByDate(Object.entries(fridgeContents));
+  const contentsSortedByDate = SortByDate(contentsFilteredBySearch);
 
   return (
     <>
@@ -170,6 +182,12 @@ function renderProducts(
       >
         <Text style={TextStyles.bodyTitle}>What's in?</Text>
       </View>
+      <TextInput
+        style={styles.searchInput}
+        placeholder="Search for a product..."
+        value={currentSearch}
+        onChangeText={setCurrentSearch}
+      />
       {/* for every item in the fridge, display accordion with its details */}
       {contentsSortedByDate.map(([id, product]) => (
         <Accordion key={id} image={product.image} title={product.name}>
@@ -239,6 +257,16 @@ const styles = StyleSheet.create({
   inventoryHeader: {
     width: "90%",
     padding: 5,
+  },
+  searchInput: {
+    color: "black",
+    width: "90%",
+    marginTop: 10,
+    marginBottom: 7,
+    padding: 10,
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: "rgba(0, 0, 0, 0.3)",
   },
 });
 
