@@ -6,13 +6,14 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import YellowButton from "./YellowButton";
-import { ConstructEmptyItem } from "../utils/ConstructItem";
 import ModalStyles from "../styles/ModalStyles";
-import * as ImagePicker from "expo-image-picker";
+import { startImageRecognition } from "../utils/ImageRecognition";
+import { ConstructEmptyItem } from "../utils/ConstructItem";
 
 /**
  * The modal that appears after selecting "Donate an item" in the Home Screen's header.
@@ -23,85 +24,18 @@ import * as ImagePicker from "expo-image-picker";
  * @returns the donation options modal
  */
 const DonateModal = ({ visible, onClose, navigation }) => {
-  const [imageUri, setImageUri] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [labels, setLabels] = useState([]);
 
-  // Function to open camera and get image URI
-  const handleTakePicture = async () => {
-    const permission = await ImagePicker.requestCameraPermissionsAsync();
-    if (!permission.granted) {
-      Alert.alert(
-        "Permission denied",
-        "Please grant permission to access camera."
-      );
-      return;
-    }
-
-    const result = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setImageUri(result.assets[0].uri); // Set the image URI after taking the picture
-      handleImageRecognition(result.assets[0].uri);
-    }
-  };
-
-  const handleImageRecognition = async (uri) => {
-    if (!uri) {
-      Alert.alert("No image", "Please upload an image first.");
-      return;
-    }
-
+  const handleImageRecognition = async () => {
     setLoading(true);
-    const api =
-      "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyCuuhKXGxS3GAKw8j4bX2aOjRtVJvxGkMA";
+    const result = await startImageRecognition();
 
-    try {
-      const imageData = await fetch(uri);
-      const imageBlob = await imageData.blob();
-      const base64Image = await blobToBase64(imageBlob);
-
-      const requestPayload = {
-        requests: [
-          {
-            image: { content: base64Image },
-            features: [{ type: "LABEL_DETECTION", maxResults: 10 }],
-          },
-        ],
-      };
-
-      const response = await fetch(api, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(requestPayload),
-      });
-      const data = await response.json();
-
-      if (data.responses && data.responses[0].labelAnnotations) {
-        const labelsData = data.responses[0].labelAnnotations;
-        labelsData.map((label) => console.log(label.description));
-        setLabels(labelsData.map((label) => label.description));
-      } else {
-        Alert.alert("No Labels", "No labels found in the image.");
-      }
-    } catch (error) {
-      console.error("Error calling Cloud Vision API:", error);
-      Alert.alert("Error", "Something went wrong with the image recognition.");
-    } finally {
+    //if a label has been successfully assigned, construct the item and pass to home screen
+    if (result[1] !== null) {
+      const scannedItem = JSON.parse(ConstructEmptyItem(result[0], result[1]));
       setLoading(false);
+      navigation.navigate("Home", { scannedItem });
     }
-  };
-
-  const blobToBase64 = async (blob) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result.split(",")[1]);
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
   };
 
   return (
@@ -143,10 +77,14 @@ const DonateModal = ({ visible, onClose, navigation }) => {
               name="camera"
               style={ModalStyles.modalIcons}
             />
-            <YellowButton
-              title="Image recognition"
-              onPress={handleTakePicture}
-            />
+            {loading ? (
+              <ActivityIndicator size="large" color="green" />
+            ) : (
+              <YellowButton
+                title="Image recognition"
+                onPress={handleImageRecognition}
+              />
+            )}
             <AntDesign name="form" style={ModalStyles.modalIcons} />
             <YellowButton
               title="Enter details"

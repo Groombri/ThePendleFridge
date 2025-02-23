@@ -9,9 +9,7 @@ import DonateModal from "../components/DonateModal";
  * This contains the page title, Pendle logo, and DrawerNav icon.
  * In the case of the home page, the header also contains the button to donate an item to the fridge.
  */
-function CustomHeader({ title, route, navigation }) {
-  const [isModalVisible, setModalVisible] = useState(false);
-
+function CustomHeader({ title, route, navigation, setDonateModalVisible }) {
   return (
     <View
       style={styles.header}
@@ -32,14 +30,7 @@ function CustomHeader({ title, route, navigation }) {
           <YellowButton
             title="Donate an item"
             onPress={() => {
-              setModalVisible(true);
-            }}
-            navigation={navigation}
-          />
-          <DonateModal
-            visible={isModalVisible}
-            onClose={() => {
-              setModalVisible(false);
+              setDonateModalVisible(true);
             }}
             navigation={navigation}
           />

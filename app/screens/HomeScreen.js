@@ -18,6 +18,7 @@ import YellowButton from "../components/YellowButton";
 import Animated, { FadeInDown, FadeOut } from "react-native-reanimated";
 import { QuantityPicker } from "../components/QuantityPicker";
 import { SortByDate } from "../utils/DateUtils";
+import DonateModal from "../components/DonateModal";
 
 /**
  * The application's home screen. This includes the apps custom header + donate an item button.
@@ -28,6 +29,7 @@ import { SortByDate } from "../utils/DateUtils";
 function HomeScreen({ navigation, route }) {
   const [scannedItem, setScannedItem] = useState(null); //stores an item that has been scanned
   const [isItemInfoModalVisible, setItemInfoModalVisible] = useState(false); //the modal that displays the info of the scannedItem
+  const [isDonateModalVisible, setDonateModalVisible] = useState(false); //the modal that displays options for donating an item
   const [isQuantityPickerVisible, setQuantityPickerVisible] = useState(false); //quantity selector for when user takes an item
   const [productToTake, setProductToTake] = useState(null); //the product that the user has selected to take
   const [productToTakeID, setProductToTakeID] = useState(null); //the ID of this product
@@ -42,6 +44,7 @@ function HomeScreen({ navigation, route }) {
     if (route.params?.scannedItem) {
       //optional chaining (?.) returns undefined if obj is undefined or null, instead of error
       setScannedItem(route.params.scannedItem);
+      setDonateModalVisible(false);
       setItemInfoModalVisible(true);
     }
 
@@ -54,7 +57,7 @@ function HomeScreen({ navigation, route }) {
       //once contents have been loaded, set loading to false
       setLoadingContents(false);
     });
-  }, [route.params]);
+  }, [route.params?.scannedItem]);
 
   //https://reactnative.dev/docs/refreshcontrol
   const onRefresh = useCallback(() => {
@@ -118,6 +121,7 @@ function HomeScreen({ navigation, route }) {
         title="The Pendle Fridge"
         route="Home"
         navigation={navigation}
+        setDonateModalVisible={setDonateModalVisible}
       />
       <Animated.View entering={FadeInDown.duration(1000)} style={styles.body}>
         <ScrollView
@@ -133,6 +137,13 @@ function HomeScreen({ navigation, route }) {
             : fridgeNotEmptyContent}
         </ScrollView>
       </Animated.View>
+      <DonateModal
+        visible={isDonateModalVisible}
+        onClose={() => {
+          setDonateModalVisible(false);
+        }}
+        navigation={navigation}
+      />
       <ItemInfoModal
         visible={isItemInfoModalVisible}
         scannedItem={scannedItem}
@@ -184,7 +195,7 @@ function renderProducts(
       </View>
       <TextInput
         style={styles.searchInput}
-        placeholder="Search for a product..."
+        placeholder="Search for an item..."
         value={currentSearch}
         onChangeText={setCurrentSearch}
       />

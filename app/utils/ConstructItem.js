@@ -33,13 +33,14 @@ export default ConstructItem = (
 
 /**
  * Constructs an empty food item, which is used when a user enters their own item
+ * Does allow the name to be specified, for use in ImageRecognition.
  * @param {*} imageUri the uri to the "no-image.png" icon
  * @returns item as a JSON string
  */
-export function ConstructEmptyItem(imageUri) {
+export function ConstructEmptyItem(imageUri, name = "EMPTY_ITEM") {
   const item = {
     productId: uuid.v4(),
-    name: "EMPTY_ITEM",
+    name: name,
     quantity: "",
     size: "",
     ingredients: "",

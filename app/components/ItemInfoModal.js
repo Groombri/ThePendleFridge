@@ -68,6 +68,7 @@ const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
       }
       //if the item isn't empty (user has scanned an item from barcode/photo)
       else {
+        console.log(scannedItem.image);
         //set values for text fields as new scanned item info
         setName(scannedItem.name || "");
         setSize(scannedItem.size || "");

@@ -32,8 +32,8 @@ async function LabelMatch(product, userLabel, threshold) {
     promises.push(getSimilarity(word, userLabel));
   }
 
-  //then try with product labels
-  for (const label of product.keywords) {
+  //then try with product labels (only first 4 due to speed)
+  for (const label of product.keywords.slice(0, 4)) {
     promises.push(getSimilarity(label, userLabel));
   }
 

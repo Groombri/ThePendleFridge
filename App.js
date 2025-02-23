@@ -55,16 +55,10 @@ export default function App() {
         setNotifications((previous) => [...previous, notification]);
       });
 
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log("User Tapped Notification:", response);
-      });
-
     return () => {
       Notifications.removeNotificationSubscription(
         notificationListener.current
       );
-      Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
 
