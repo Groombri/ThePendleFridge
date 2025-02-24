@@ -1,8 +1,6 @@
-import React, { useState } from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
 import YellowButton from "../components/YellowButton";
 import MenuButton from "../components/MenuButton";
-import DonateModal from "../components/DonateModal";
 
 /**
  * Custom green header that is displayed at the top of each page.

@@ -42,7 +42,7 @@ const ItemInfoModal = ({ visible, onClose, scannedItem }) => {
   //initialise hooks for appropriate modal type
   const [title, setTitle] = useState("Does this look right?");
   const [subTitle, setSubTitle] = useState(
-    "Some data from the barcode scan may be missing or incorrect."
+    "Some data from the scan may be missing or incorrect."
   );
 
   //for awaiting add to fridge to be resolved

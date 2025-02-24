@@ -1,6 +1,7 @@
 import { firestore } from "../config/firebaseConfig";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import * as Device from "expo-device";
+import { Alert } from "react-native";
 
 /**
  * Adds a new user(device) to the users database.
@@ -27,7 +28,12 @@ export default async function AddNewUser() {
       };
 
       await setDoc(userRef, defaultSettings);
-      console.log("new user added!");
+
+      //welcomes the user
+      Alert.alert(
+        "Welcome 👋",
+        "Please check out the 'About' and 'How to use' pages to get started!"
+      );
     } else {
       console.log("user already exists");
     }

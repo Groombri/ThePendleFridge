@@ -18,6 +18,7 @@ export default function ReadFridge(onData) {
       onData(data);
     },
     (error) => {
+      console.log("ERROR READING FRIDGE");
       console.error(error);
       onData(null);
     }

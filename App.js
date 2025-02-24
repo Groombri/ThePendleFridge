@@ -8,7 +8,6 @@ import AddNewUser from "./app/utils/AddNewUser";
 import * as Notifications from "expo-notifications";
 import ReadSettings from "./app/utils/ReadSettings";
 import { startLocationCheck } from "./app/utils/TrackLocation";
-import NotificationsScreen from "./app/screens/NotificationsScreen";
 
 /**
  * The Pendle fridge app driver. Ensures that all contents are contained within a custom SafeAreaView.
@@ -17,7 +16,6 @@ import NotificationsScreen from "./app/screens/NotificationsScreen";
  */
 export default function App() {
   const notificationListener = useRef();
-  const responseListener = useRef();
   const [notifications, setNotifications] = useState([]);
 
   //things to initialise upon opening the app
