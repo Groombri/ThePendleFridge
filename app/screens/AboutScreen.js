@@ -137,6 +137,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 15,
     padding: 15,
+    backgroundColor: "rgb(239, 239, 239)",
   },
   rulesText: {
     marginBottom: 15,

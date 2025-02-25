@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, Linking } from "react-native";
 import CustomHeader from "../components/CustomHeader";
 import DefaultPageStyle from "../styles/DefaultPageStyle";
 import TextStyles from "../styles/TextStyles";
@@ -10,7 +10,7 @@ export default function HelpScreen() {
       <CustomHeader title="User guide" />
       <View style={DefaultPageStyle.body}>
         <ScrollView contentContainerStyle={styles.scrollView}>
-          <Text style={styles.title}>Taking items 😋</Text>
+          <Text style={styles.title}>Taking items 🥗 </Text>
           <Text style={[TextStyles.bodyMain, styles.rulesText]}>
             After taking an item from the fridge, you should use the app to let
             users know about what you took. This is easy:
@@ -47,7 +47,8 @@ export default function HelpScreen() {
             <Text style={[TextStyles.bodyMain, styles.rulesText]}>
               • With image recognition, you can take a picture of a product and
               the AI will auto-fill the item name and picture for you. This
-              works best for unpackaged items like loose fruit and veg.
+              works best for unpackaged items like loose fruit and veg. Make
+              sure to only include the item in the photo and nothing else.
             </Text>
             <Text style={[TextStyles.bodyMain, styles.rulesText]}>
               • You can also simply enter all the details about the item you
@@ -82,7 +83,15 @@ export default function HelpScreen() {
           <Text style={styles.title}>Contact 📨</Text>
           <Text style={[TextStyles.bodyMain, styles.rulesText]}>
             Any problems with the app? Anything unclear? If you have something
-            you'd like to say, contact e.groombridge@lancaster.ac.uk
+            you'd like to say, contact{" "}
+            <Text
+              style={TextStyles.link}
+              onPress={() =>
+                Linking.openURL("mailto:e.groombridge@lancaster.ac.uk")
+              }
+            >
+              e.groombridge@lancaster.ac.uk
+            </Text>{" "}
           </Text>
         </ScrollView>
       </View>
@@ -99,6 +108,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 15,
     padding: 15,
+    backgroundColor: "rgb(239, 239, 239)",
   },
   rulesText: {
     marginBottom: 15,
