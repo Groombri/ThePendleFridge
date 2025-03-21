@@ -14,6 +14,7 @@ const TimePicker = ({ notificationTimesEnabled, notificationTimes }) => {
   const [time, setTime] = useState(DateToString(new Date(0, 0, 0, 9, 0)));
   const [time2, setTime2] = useState(DateToString(new Date(0, 0, 0, 17, 0)));
   const [isFirstRender, setIsFirstRender] = useState(true);
+  console.log("NOTIFICATION TIMES: ", notificationTimes);
 
   //on every rerender, if notificationTimes are enabled, set users notification times to times on the time picker
   useEffect(() => {
@@ -21,6 +22,7 @@ const TimePicker = ({ notificationTimesEnabled, notificationTimes }) => {
       let times = [time, time2];
       //if this is the first render, get the times from the users settings
       if (isFirstRender && notificationTimes.length === 2) {
+        console.log("IS FIRST RENDER");
         setTime(notificationTimes[0]);
         setTime2(notificationTimes[1]);
         times = [time, time2];

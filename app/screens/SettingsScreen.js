@@ -21,9 +21,9 @@ export default function SettingsScreen() {
     useState(false);
   const [notificationTimesEnabled, setNotificationTimesEnabled] =
     useState(false);
-  const [notificationTimes, setNotificationTimes] = useState(null);
+  const [notificationTimes, setNotificationTimes] = useState([]);
   const [notifyFoodsEnabled, setNotifyFoodsEnabled] = useState(false);
-  const [notifyFoods, setNotifyFoods] = useState(null);
+  const [notifyFoods, setNotifyFoods] = useState([]);
 
   //every time page is rendered, get user settings and display on screen
   useEffect(() => {
