@@ -8,7 +8,6 @@ import { getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCuuhKXGxS3GAKw8j4bX2aOjRtVJvxGkMA",
   authDomain: "the-pendle-fridge-ebc63.firebaseapp.com",
   projectId: "the-pendle-fridge-ebc63",
   storageBucket: "the-pendle-fridge-ebc63.firebasestorage.app",
